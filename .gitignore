@@ -1,0 +1,73 @@
+# ── Environment ──────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+*.pyo
+
+# ── Testing & coverage ────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ── Reports (generated, not committed) ───────────────────────────────────────
+reports/
+*.eval.json
+
+# ── Notebooks (checkpoints only) ─────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Data & corpora ───────────────────────────────────────────────────────────
+# Seed fixtures are committed; real corpora are not
+data/
+*.parquet
+*.arrow
+*.feather
+# Keep test fixtures
+!**/tests/fixtures/**
+
+# ── Vector store local files ──────────────────────────────────────────────────
+chroma_db/
+*.faiss
+*.annoy
+
+# ── LangSmith / tracing local cache ──────────────────────────────────────────
+.langchain/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.sublime-workspace
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+# Keep docker-compose for dev setup
+docker-compose.override.yml
+
+# ── Secrets (paranoia layer) ──────────────────────────────────────────────────
+*.pem
+*.key
+*_secret*
+*_private*
