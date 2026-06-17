@@ -92,9 +92,7 @@ def _dedupe_and_rank(results: list[RetrievalResult]) -> list[RetrievalResult]:
         if key not in merged or result.combined_score > merged[key].combined_score:
             merged[key] = result
     ranked = sorted(merged.values(), key=lambda result: result.combined_score, reverse=True)
-    for rank, result in enumerate(ranked, start=1):
-        result.rank = rank
-    return ranked
+    return [result.model_copy(update={"rank": rank}) for rank, result in enumerate(ranked, start=1)]
 
 
 def _result_key(result: RetrievalResult) -> str:

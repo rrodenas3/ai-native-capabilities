@@ -9,7 +9,8 @@ from core.utils.settings import get_settings
 
 MODULE_PATH = Path(__file__).parents[1] / "agents" / "supervisor.py"
 SPEC = importlib.util.spec_from_file_location("cap01_supervisor", MODULE_PATH)
-assert SPEC and SPEC.loader
+if SPEC is None or SPEC.loader is None:
+    raise RuntimeError(f"Unable to load supervisor module from {MODULE_PATH}")
 supervisor_module = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = supervisor_module
 SPEC.loader.exec_module(supervisor_module)
@@ -75,6 +76,15 @@ def test_supervisor_preserves_existing_corpus_scope(monkeypatch) -> None:
     result = supervisor_node(base_state("Any question", corpus_scope=["custom"]))
 
     assert result["corpus_scope"] == ["custom"]
+
+
+def test_supervisor_preserves_explicit_empty_corpus_scope(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_MODE", "mock")
+    get_settings.cache_clear()
+
+    result = supervisor_node(base_state("financial strategy", corpus_scope=[]))
+
+    assert result["corpus_scope"] == []
 
 
 def test_supervisor_handles_20_diverse_queries(monkeypatch) -> None:
