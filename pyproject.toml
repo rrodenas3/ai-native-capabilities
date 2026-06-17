@@ -87,6 +87,13 @@ qdrant = [
     # Overflow option at 50M+ vectors; Qdrant 1.9.x ~850 QPS at p95 ~8ms
     "qdrant-client>=1.12.0",
 ]
+# Lean install for GitHub Actions — avoids arize-phoenix/braintrust resolver churn.
+ci = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "fakeredis>=2.36.0",
+    "semgrep>=1.90.0",         # Cap-02 security gate CLI (REQUIRE_SECURITY_SCANNERS)
+]
 dev = [
     "pytest>=8.3.0",
     "pytest-asyncio>=0.25.0",
