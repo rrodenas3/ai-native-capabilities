@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     OPENAI_LLM_FAST: str = "gpt-5-mini"
     OPENAI_LLM_FRONTIER: str = "gpt-5.5"
 
-    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/ai_native"
+    DATABASE_URL: str = "postgresql://localhost:5432/ai_native"
     REDIS_URL: str = "redis://localhost:6379"
 
     VECTOR_STORE: Literal["pgvector", "qdrant"] = "pgvector"
@@ -109,9 +109,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _require_anthropic_key_unless_mock(self) -> Settings:
-        if self.LLM_MODE != "mock" and (
-            not self.ANTHROPIC_API_KEY or self.ANTHROPIC_API_KEY.startswith("sk-ant-...")
-        ):
+        placeholder_keys = {"", "sk-ant-...", "sk-ant-api03-..."}
+        if self.LLM_MODE != "mock" and self.ANTHROPIC_API_KEY in placeholder_keys:
             raise ValueError("ANTHROPIC_API_KEY is required unless LLM_MODE=mock")
         return self
 

@@ -21,8 +21,6 @@ from rich.table import Table
 from core.utils.health import HealthChecker
 
 console = Console()
-
-
 def main() -> None:
     checker = HealthChecker()
     results = checker.run()

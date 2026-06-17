@@ -68,10 +68,14 @@ class HealthChecker:
         _assert_tcp_open(settings.DATABASE_URL, default_port=5432)
         with psycopg.connect(settings.DATABASE_URL, connect_timeout=1) as conn, conn.cursor() as cur:
             cur.execute("SELECT version()")
-            version = cur.fetchone()[0].split(" ")[1]
+            version_row = cur.fetchone()
+            version_text = str(version_row[0]) if version_row and version_row[0] else "unknown"
+            version_parts = version_text.split()
+            version = version_parts[1] if len(version_parts) > 1 else "unknown"
             cur.execute("SELECT extversion FROM pg_extension WHERE extname='vector'")
             pgvector = cur.fetchone()
-        return f"postgres {version}; pgvector {pgvector[0] if pgvector else 'missing'}"
+        pgvector_version = pgvector[0] if pgvector and pgvector[0] else "missing"
+        return f"postgres {version}; pgvector {pgvector_version}"
 
     def check_redis(self) -> str:
         settings = self.settings_factory()
@@ -86,23 +90,23 @@ class HealthChecker:
         if settings.LLM_MODE == "mock":
             return "mock mode; key not required"
         key = settings.ANTHROPIC_API_KEY
-        if not key or key.startswith("sk-ant-..."):
+        if not key or key in {"sk-ant-...", "sk-ant-api03-..."}:
             raise ValueError("ANTHROPIC_API_KEY not set")
-        return f"key set ({key[:12]}...)"
+        return "key configured"
 
     def check_openai(self) -> str:
         settings = self.settings_factory()
         key = settings.OPENAI_API_KEY
         if not key or key.startswith("sk-..."):
             raise ValueError("OPENAI_API_KEY not configured")
-        return f"key set ({key[:8]}...)"
+        return "key configured"
 
     def check_langsmith(self) -> str:
         settings = self.settings_factory()
         key = settings.LANGCHAIN_API_KEY
         if not key:
             raise ValueError("LANGCHAIN_API_KEY not configured")
-        return f"key set ({key[:12]}...)"
+        return "key configured"
 
     def _run_check(
         self,
@@ -117,7 +121,14 @@ class HealthChecker:
             return HealthResult(name=name, status="pass", detail=f"{detail} ({elapsed_ms}ms)", required=required)
         except Exception as exc:
             status = "fail" if required else "warn"
-            return HealthResult(name=name, status=status, detail=str(exc)[:120], required=required)
+            detail = _safe_error_detail(exc)
+            return HealthResult(name=name, status=status, detail=detail, required=required)
+
+
+def _safe_error_detail(exc: Exception) -> str:
+    if isinstance(exc, ValueError) and "ANTHROPIC_API_KEY" in str(exc):
+        return "ANTHROPIC_API_KEY is required unless LLM_MODE=mock"
+    return str(exc)[:120]
 
 
 def _assert_tcp_open(url: str, *, default_port: int) -> None:
