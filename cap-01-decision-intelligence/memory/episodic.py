@@ -102,7 +102,10 @@ def _stored_brief(event: MemoryEvent) -> StoredBrief:
 def _optional_float(value: Any) -> float | None:
     if value is None:
         return None
-    return float(value)
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _brief_output_schema():

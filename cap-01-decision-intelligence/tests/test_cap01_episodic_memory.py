@@ -34,7 +34,7 @@ BriefOutput = schema_module.BriefOutput
 
 
 class FakeCursor(AbstractContextManager["FakeCursor"]):
-    def __init__(self, connection: FakeConnection) -> None:
+    def __init__(self, connection: "FakeConnection") -> None:
         self.connection = connection
         self._rows: list[tuple[Any, ...]] = []
 
@@ -172,6 +172,23 @@ def test_get_session_history_returns_newest_completed_briefs_first() -> None:
 
     assert [item.run_id for item in history] == ["run-new", "run-old"]
     assert [item.query for item in history] == ["new", "old"]
+
+
+def test_invalid_numeric_metadata_returns_none() -> None:
+    connection = FakeConnection()
+    memory = make_memory(connection)
+    memory.store_brief(make_brief(), "session-1", "run-1", cost_usd=0.1, latency_ms=2.0)
+    row = list(connection.rows[0])
+    metadata = dict(row[7])
+    metadata["cost_usd"] = "not-a-number"
+    metadata["latency_ms"] = object()
+    row[7] = metadata
+    connection.rows[0] = tuple(row)
+
+    stored = memory.get_session_history("session-1")[0]
+
+    assert stored.cost_usd is None
+    assert stored.latency_ms is None
 
 
 def _parse_test_vector(value: str) -> list[float]:
