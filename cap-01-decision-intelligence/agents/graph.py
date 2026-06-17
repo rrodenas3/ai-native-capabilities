@@ -3,17 +3,21 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, NotRequired, Protocol, TypedDict
+from time import perf_counter
+from typing import Any, NotRequired, Protocol
 
+from langgraph.errors import GraphInterrupt
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
-from langgraph.errors import GraphInterrupt
 
 from core.governance import HumanApprovalGate
+from core.observability.cost import BudgetAlertHandler, CostTelemetry
+from core.observability.telemetry import trace_agent_hop
 from core.orchestration.base_state import BaseAgentState
 from core.schemas import AgentHop, AuditEvent, CapabilityID, Finding, RetrievalResult
 from core.utils.settings import get_settings
@@ -44,6 +48,9 @@ class DecisionBriefState(BaseAgentState, total=False):
     human_gate_status: str
     human_override_rate: float
     cost_tokens: int
+    cost_tokens_in: int
+    cost_tokens_out: int
+    cost_usd_total: float
     cost_telemetry: NotRequired[dict[str, Any]]
 
 
@@ -64,20 +71,23 @@ def build_graph(
     episodic_memory: Any = None,
     require_human_review: bool = True,
     k_per_query: int = 10,
+    budget_alert_handler: BudgetAlertHandler | None = None,
+    cost_telemetry: CostTelemetry | None = None,
 ) -> CompiledStateGraph:
     """Build and compile the complete Cap-01 decision brief graph."""
 
     graph = StateGraph(DecisionBriefState)
     retrieval_node = build_retrieval_agent(retriever, k_per_query=k_per_query)
     human_gate = HumanApprovalGate(requires_approval=lambda _state: require_human_review)
+    telemetry = cost_telemetry or CostTelemetry(budget_alert_handler=budget_alert_handler)
 
-    graph.add_node("supervisor", _with_transition_audit("supervisor", supervisor_node))
-    graph.add_node("retrieval", _with_transition_audit("retrieval", retrieval_node))
-    graph.add_node("analysis", _with_transition_audit("analysis", analysis_agent_node))
-    graph.add_node("verification", _with_transition_audit("verification", verification_agent_node))
-    graph.add_node("assembly", _with_transition_audit("assembly", brief_agent_node))
-    graph.add_node("human_gate", _with_transition_audit("human_gate", human_gate))
-    graph.add_node("episodic_memory", _with_transition_audit("episodic_memory", _memory_store_node(episodic_memory)))
+    graph.add_node("supervisor", _with_transition_audit("supervisor", supervisor_node, telemetry))
+    graph.add_node("retrieval", _with_transition_audit("retrieval", retrieval_node, telemetry))
+    graph.add_node("analysis", _with_transition_audit("analysis", analysis_agent_node, telemetry))
+    graph.add_node("verification", _with_transition_audit("verification", verification_agent_node, telemetry))
+    graph.add_node("assembly", _with_transition_audit("assembly", brief_agent_node, telemetry))
+    graph.add_node("human_gate", _with_transition_audit("human_gate", human_gate, telemetry))
+    graph.add_node("episodic_memory", _with_transition_audit("episodic_memory", _memory_store_node(episodic_memory), telemetry))
     graph.add_node("cost_telemetry", cost_telemetry_node)
 
     graph.add_edge(START, "supervisor")
@@ -96,22 +106,33 @@ def build_graph(
 def cost_telemetry_node(state: DecisionBriefState) -> dict[str, Any]:
     """Aggregate cost and token counters across all agent hops."""
 
-    tokens = 0
+    tokens_in = 0
+    tokens_out = 0
     cost_usd = 0.0
     for hop in state.get("agent_hops", []):
         if isinstance(hop, AgentHop):
-            tokens += hop.tokens_in + hop.tokens_out
+            tokens_in += hop.tokens_in
+            tokens_out += hop.tokens_out
             cost_usd += hop.cost_usd
         elif isinstance(hop, dict):
-            tokens += int(hop.get("tokens_in", 0)) + int(hop.get("tokens_out", 0))
+            tokens_in += int(hop.get("tokens_in", 0))
+            tokens_out += int(hop.get("tokens_out", 0))
             cost_usd += float(hop.get("cost_usd", 0.0))
 
+    total_tokens = tokens_in + tokens_out
+    cost_usd = round(cost_usd, 6)
     return {
-        "cost_tokens": tokens,
+        "cost_tokens": total_tokens,
+        "cost_tokens_in": tokens_in,
+        "cost_tokens_out": tokens_out,
+        "cost_usd_total": cost_usd,
         "human_override_rate": _human_override_rate(state),
         "cost_telemetry": {
-            "tokens": tokens,
-            "cost_usd": round(cost_usd, 6),
+            "tokens": total_tokens,
+            "tokens_in": tokens_in,
+            "tokens_out": tokens_out,
+            "cost_usd": cost_usd,
+            "cost_per_brief_usd": cost_usd,
             "hop_count": len(state.get("agent_hops", [])),
             "human_override_rate": _human_override_rate(state),
             "run_id": state.get("run_id"),
@@ -187,11 +208,14 @@ def initial_state(query: str, *, run_id: str, session_id: str, user_role: str = 
         "error_state": None,
         "human_approved": None,
         "cost_tokens": 0,
+        "cost_tokens_in": 0,
+        "cost_tokens_out": 0,
+        "cost_usd_total": 0.0,
         "latency_ms": 0.0,
     }
 
 
-def _with_transition_audit(name: str, node: Any):
+def _with_transition_audit(name: str, node: Any, telemetry: CostTelemetry | None = None):
     def wrapped(state: DecisionBriefState) -> dict[str, Any]:
         before = state.get("current_agent", "")
         if state.get("error_state"):
@@ -210,7 +234,10 @@ def _with_transition_audit(name: str, node: Any):
             return {"audit_trail": audit_trail}
 
         try:
+            started = perf_counter()
             update = node(state)
+            latency_ms = (perf_counter() - started) * 1000
+            update = _record_new_hops(state, update, latency_ms, telemetry)
             audit_trail = list(update.get("audit_trail", state.get("audit_trail", [])))
             success = True
             payload: dict[str, Any] = {"from": before, "to": name}
@@ -246,6 +273,82 @@ def _with_transition_audit(name: str, node: Any):
         return {**update, "audit_trail": audit_trail}
 
     return wrapped
+
+
+def _record_new_hops(
+    before_state: DecisionBriefState,
+    update: dict[str, Any],
+    latency_ms: float,
+    telemetry: CostTelemetry | None,
+) -> dict[str, Any]:
+    before_hops = list(before_state.get("agent_hops", []))
+    after_hops = list(update.get("agent_hops", before_hops))
+    if len(after_hops) <= len(before_hops):
+        return update
+
+    tokens_in = _estimate_tokens(before_state)
+    tokens_out = max(_estimate_tokens(update) - tokens_in, _estimate_tokens(_changed_fields(before_state, update)))
+    tokens_in = max(tokens_in, 1)
+    tokens_out = max(tokens_out, 1)
+    run_id = str(update.get("run_id") or before_state.get("run_id") or "")
+
+    enriched_hops = [*_normalise_hops(after_hops[: len(before_hops)])]
+    for hop in _normalise_hops(after_hops[len(before_hops) :]):
+        event = telemetry.record_llm_call(
+            hop.model,
+            tokens_in,
+            tokens_out,
+            latency_ms,
+            hop.agent_name,
+            run_id,
+        ) if telemetry is not None else None
+        enriched = hop.model_copy(
+            update={
+                "tokens_in": tokens_in,
+                "tokens_out": tokens_out,
+                "latency_ms": round(latency_ms, 3),
+                "cost_usd": event.cost_usd if event is not None else hop.cost_usd,
+            }
+        )
+        with trace_agent_hop(enriched):
+            pass
+        enriched_hops.append(enriched)
+    return {**update, "agent_hops": enriched_hops}
+
+
+def _normalise_hops(hops: list[Any]) -> list[AgentHop]:
+    normalised: list[AgentHop] = []
+    for hop in hops:
+        if isinstance(hop, AgentHop):
+            normalised.append(hop)
+        elif isinstance(hop, dict):
+            normalised.append(AgentHop(**hop))
+    return normalised
+
+
+def _estimate_tokens(value: Any) -> int:
+    text = json.dumps(_jsonable(value), sort_keys=True, default=str)
+    return max(1, len(text) // 12)
+
+
+def _changed_fields(before_state: DecisionBriefState, update: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key: value
+        for key, value in update.items()
+        if key not in before_state or before_state.get(key) != value
+    }
+
+
+def _jsonable(value: Any) -> Any:
+    if hasattr(value, "model_dump"):
+        return value.model_dump(mode="json")
+    if isinstance(value, dict):
+        return {key: _jsonable(inner) for key, inner in value.items()}
+    if isinstance(value, list):
+        return [_jsonable(inner) for inner in value]
+    if isinstance(value, tuple):
+        return [_jsonable(inner) for inner in value]
+    return value
 
 
 def _load_attr(module_name: str, relative_path: str, attr: str) -> Any:
