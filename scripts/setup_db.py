@@ -24,7 +24,7 @@ def database_url(test: bool = False) -> str:
     except ValueError:
         resolved_url = os.getenv(
             "DATABASE_URL",
-            "postgresql://postgres:postgres@localhost:5432/ai_native",
+            "postgresql://localhost:5432/ai_native",
         )
     if not test:
         return resolved_url
@@ -52,7 +52,10 @@ def ensure_database(target_url: str) -> None:
 
 
 def apply_schema(target_url: str) -> None:
-    schema_sql = (ROOT / "scripts" / "init_db.sql").read_text(encoding="utf-8")
+    schema_path = ROOT / "scripts" / "init_db.sql"
+    if not schema_path.exists():
+        raise FileNotFoundError(f"Database schema file not found: {schema_path}")
+    schema_sql = schema_path.read_text(encoding="utf-8")
     with psycopg.connect(target_url) as conn:
         with conn.cursor() as cur:
             cur.execute(schema_sql)
