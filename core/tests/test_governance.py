@@ -5,6 +5,7 @@ import pytest
 from core.governance import GATE_DEFINITIONS, GovernanceGateEngine, HumanApprovalGate
 from core.governance.human_gate import requires_value_approval
 from core.schemas.base import AuditEvent
+from core.utils.settings import get_settings
 
 
 def base_state(**overrides):
@@ -74,7 +75,9 @@ def test_quality_gate_uses_eval_threshold() -> None:
 
 
 def test_requires_value_approval_uses_configured_threshold(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_MODE", "mock")
     monkeypatch.setenv("AUTONOMOUS_ACTION_THRESHOLD_USD", "5000")
+    get_settings.cache_clear()
 
     assert requires_value_approval(base_state(value_usd=5000.0)) is True
     assert requires_value_approval(base_state(value_usd=4999.0)) is False
@@ -87,7 +90,10 @@ def test_human_gate_uses_interrupt_and_logs_approval() -> None:
         calls.append(payload)
         return {"status": "approved", "approved_by": "ops-lead"}
 
-    gate = HumanApprovalGate(interrupt_fn=fake_interrupt)
+    gate = HumanApprovalGate(
+        requires_approval=lambda state: requires_value_approval(state, threshold_usd=5000),
+        interrupt_fn=fake_interrupt,
+    )
 
     result = gate(base_state())
 
@@ -99,7 +105,10 @@ def test_human_gate_uses_interrupt_and_logs_approval() -> None:
 
 
 def test_human_gate_rejects_when_decision_is_negative() -> None:
-    gate = HumanApprovalGate(interrupt_fn=lambda payload: {"status": "rejected"})
+    gate = HumanApprovalGate(
+        requires_approval=lambda state: requires_value_approval(state, threshold_usd=5000),
+        interrupt_fn=lambda payload: {"status": "rejected"},
+    )
 
     result = gate(base_state())
 

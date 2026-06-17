@@ -10,13 +10,14 @@ from langgraph.types import interrupt
 
 from core.orchestration.base_state import BaseAgentState
 from core.schemas.base import AuditEvent, CapabilityID, HumanGateStatus
+from core.utils.settings import get_settings
 
 InterruptFn = Callable[[dict[str, Any]], Any]
 ApprovalPredicate = Callable[[BaseAgentState], bool]
 
 
 def autonomous_action_threshold_usd() -> float:
-    return float(os.getenv("AUTONOMOUS_ACTION_THRESHOLD_USD", "5000"))
+    return get_settings().AUTONOMOUS_ACTION_THRESHOLD_USD
 
 
 def requires_value_approval(
