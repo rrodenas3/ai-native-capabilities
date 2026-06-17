@@ -11,6 +11,7 @@ from typing import Any, NotRequired, Protocol, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
+from langgraph.errors import GraphInterrupt
 
 from core.governance import HumanApprovalGate
 from core.orchestration.base_state import BaseAgentState
@@ -34,10 +35,14 @@ class DecisionBriefState(BaseAgentState, total=False):
     recommended_actions: list[str]
     overall_confidence: float
     brief: Any
+    brief_stored: bool
+    brief_memory_event_id: str
     web_research_required: bool
     corpus_confidence: float
     evidence_strength: float
     citation_accuracy: float
+    human_gate_status: str
+    human_override_rate: float
     cost_tokens: int
     cost_telemetry: NotRequired[dict[str, Any]]
 
@@ -56,6 +61,7 @@ def build_graph(
     retriever: Retriever,
     *,
     checkpointer: Any = None,
+    episodic_memory: Any = None,
     require_human_review: bool = True,
     k_per_query: int = 10,
 ) -> CompiledStateGraph:
@@ -71,6 +77,7 @@ def build_graph(
     graph.add_node("verification", _with_transition_audit("verification", verification_agent_node))
     graph.add_node("assembly", _with_transition_audit("assembly", brief_agent_node))
     graph.add_node("human_gate", _with_transition_audit("human_gate", human_gate))
+    graph.add_node("episodic_memory", _with_transition_audit("episodic_memory", _memory_store_node(episodic_memory)))
     graph.add_node("cost_telemetry", cost_telemetry_node)
 
     graph.add_edge(START, "supervisor")
@@ -79,7 +86,8 @@ def build_graph(
     graph.add_edge("analysis", "verification")
     graph.add_edge("verification", "assembly")
     graph.add_edge("assembly", "human_gate")
-    graph.add_edge("human_gate", "cost_telemetry")
+    graph.add_edge("human_gate", "episodic_memory")
+    graph.add_edge("episodic_memory", "cost_telemetry")
     graph.add_edge("cost_telemetry", END)
 
     return graph.compile(checkpointer=checkpointer, name="cap-01-decision-brief")
@@ -100,13 +108,45 @@ def cost_telemetry_node(state: DecisionBriefState) -> dict[str, Any]:
 
     return {
         "cost_tokens": tokens,
+        "human_override_rate": _human_override_rate(state),
         "cost_telemetry": {
             "tokens": tokens,
             "cost_usd": round(cost_usd, 6),
             "hop_count": len(state.get("agent_hops", [])),
+            "human_override_rate": _human_override_rate(state),
             "run_id": state.get("run_id"),
         },
     }
+
+
+def _memory_store_node(episodic_memory: Any):
+    def store_completed_brief(state: DecisionBriefState) -> dict[str, Any]:
+        if episodic_memory is None or state.get("human_approved") is not True or state.get("brief") is None:
+            return {"brief_stored": False}
+
+        event_id = episodic_memory.store_brief(
+            state["brief"],
+            str(state.get("session_id", "")),
+            str(state.get("run_id", "")),
+            query=str(state.get("query", "")),
+            cost_usd=float(state.get("cost_telemetry", {}).get("cost_usd", 0.0))
+            if isinstance(state.get("cost_telemetry"), dict)
+            else None,
+            latency_ms=float(state.get("latency_ms", 0.0)),
+            metadata={"human_gate_status": state.get("human_gate_status")},
+        )
+        return {"brief_stored": True, "brief_memory_event_id": event_id}
+
+    return store_completed_brief
+
+
+def _human_override_rate(state: DecisionBriefState) -> float:
+    status = state.get("human_gate_status")
+    if status in {"rejected", "modified"}:
+        return 1.0
+    if status == "approved":
+        return 0.0
+    return 0.0
 
 
 @contextmanager
@@ -174,6 +214,8 @@ def _with_transition_audit(name: str, node: Any):
             audit_trail = list(update.get("audit_trail", state.get("audit_trail", [])))
             success = True
             payload: dict[str, Any] = {"from": before, "to": name}
+        except GraphInterrupt:
+            raise
         except Exception as exc:
             update = {
                 "current_agent": name,
