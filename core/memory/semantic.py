@@ -182,7 +182,7 @@ class SemanticMemory:
     def _default_connection_factory(database_url: str | None) -> ConnectionFactory:
         resolved_url = database_url or os.getenv(
             "DATABASE_URL",
-            "postgresql://postgres:postgres@localhost:5432/ai_native",
+            "postgresql://localhost:5432/ai_native",
         )
         return lambda: psycopg.connect(resolved_url)
 

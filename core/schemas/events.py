@@ -7,7 +7,7 @@ from enum import StrEnum
 from typing import Any
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from core.schemas.base import CapabilityID, HumanGateStatus
 
@@ -35,13 +35,25 @@ class CapabilityAuditEvent(BaseModel):
 
 
 class HumanApprovalAuditEvent(CapabilityAuditEvent):
-    event_type: AuditEventType = AuditEventType.HUMAN_GATE
     decision: HumanGateStatus
     approved_by: str | None = None
 
+    @model_validator(mode="before")
+    @classmethod
+    def _set_event_type(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            return {**data, "event_type": AuditEventType.HUMAN_GATE}
+        return data
+
 
 class ToolActionAuditEvent(CapabilityAuditEvent):
-    event_type: AuditEventType = AuditEventType.TOOL_ACTION
     tool_name: str
     read_only: bool
     success: bool
+
+    @model_validator(mode="before")
+    @classmethod
+    def _set_event_type(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            return {**data, "event_type": AuditEventType.TOOL_ACTION}
+        return data
