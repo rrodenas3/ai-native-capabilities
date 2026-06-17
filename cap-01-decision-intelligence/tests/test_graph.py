@@ -4,6 +4,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
 from langgraph.checkpoint.memory import MemorySaver
 
 from core.schemas import CapabilityID, DocumentChunk, RetrievalResult
@@ -133,3 +134,28 @@ def test_postgres_checkpointer_factory_is_context_manager() -> None:
 
     assert hasattr(manager, "__enter__")
     assert hasattr(manager, "__exit__")
+
+
+def test_postgres_checkpointer_rejects_invalid_url() -> None:
+    with pytest.raises(ValueError, match="Invalid PostgreSQL connection string"):
+        with build_postgres_checkpointer("sqlite://local"):
+            pass
+
+
+def test_graph_records_error_state_when_node_fails(monkeypatch) -> None:
+    configure_mock_human_gate(monkeypatch)
+
+    class FailingRetriever:
+        def hybrid_search(self, query: str, k: int = 10, filters=None, access_tier: str = "internal"):
+            raise RuntimeError("retriever unavailable")
+
+    graph = build_graph(FailingRetriever(), checkpointer=MemorySaver())
+
+    output = graph.invoke(
+        initial_state("What are supply chain risks?", run_id="run-error", session_id="session-error"),
+        config={"configurable": {"thread_id": "run-error"}},
+    )
+
+    assert output["error_state"]["node"] == "retrieval"
+    assert output["error_state"]["error_type"] == "RuntimeError"
+    assert any(event.action == "node_failed" for event in output["audit_trail"])
