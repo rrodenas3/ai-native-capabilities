@@ -9,6 +9,7 @@ class OrderManagementConnector:
             "1001": {"order_id": "1001", "status": "shipped", "items": ["p-espresso"], "returnable": True},
             "1002": {"order_id": "1002", "status": "processing", "items": ["p-tablet"], "returnable": False},
         }
+        self._next_order_id = 2003
 
     def get_order(self, order_id: str) -> dict | None:
         return self.orders.get(order_id)
@@ -16,7 +17,8 @@ class OrderManagementConnector:
     def create_order(self, customer_id: str, items: list[str], *, confirmed: bool = False) -> dict:
         if not confirmed:
             raise ValueError("Order confirmation required before OMS write")
-        order_id = str(2000 + len(self.orders))
+        order_id = str(self._next_order_id)
+        self._next_order_id += 1
         self.orders[order_id] = {"order_id": order_id, "customer_id": customer_id, "items": items, "status": "created"}
         return self.orders[order_id]
 

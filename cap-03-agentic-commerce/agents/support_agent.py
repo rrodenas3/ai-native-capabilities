@@ -36,7 +36,7 @@ def support_node(state: dict[str, Any]) -> dict[str, Any]:
             citations.append(POLICIES["returns"].split(":")[0])
             result = ResolutionResult(
                 resolution_type=ResolutionType.ACTION_TAKEN if action["status"] == "return_started" else ResolutionType.INFORMATION,
-                resolution_text=f"Live OMS status for order {order_id}: {order['status']}. Return result: {action['status']}.",
+                resolution_text=f"Live OMS status for order {order_id}: {order.get('status', 'unknown')}. Return result: {action.get('status', 'unknown')}.",
                 citations=citations,
                 order_id=order_id,
             )
@@ -44,7 +44,7 @@ def support_node(state: dict[str, Any]) -> dict[str, Any]:
             citations.append(POLICIES["shipping"].split(":")[0])
             result = ResolutionResult(
                 resolution_type=ResolutionType.INFORMATION,
-                resolution_text=f"Live OMS status for order {order_id}: {order['status']}.",
+                resolution_text=f"Live OMS status for order {order_id}: {order.get('status', 'unknown')}.",
                 citations=citations,
                 order_id=order_id,
             )

@@ -19,7 +19,7 @@ def rank_products(query: str, products: list[Product], *, top_n: int = 3) -> lis
         relevance = min(1.0, sum(term in haystack for term in terms) / max(len(terms), 1))
         stock = 1.0 if product.stock > 0 else 0.0
         margin = margin_score(product)
-        combined = round((relevance * 0.6) + (margin * 0.3) + (stock * 0.1), 4)
+        combined = round((relevance * 0.6) + (max(margin, 0.0) * 0.3) + (stock * 0.1), 4)
         recommendations.append(
             Recommendation(
                 product=product,
