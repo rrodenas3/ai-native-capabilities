@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from collections.abc import Callable
 from dataclasses import dataclass
+from threading import Lock
 
 from core.utils.settings import get_settings
 
@@ -43,6 +44,8 @@ class CostTelemetry:
     ) -> None:
         self.pricing = pricing or MODEL_PRICING
         self.events: list[CostEvent] = []
+        self._lock = Lock()
+        self._alerted_runs: set[str] = set()
         self.budget_alert_handler = budget_alert_handler
         self.session_budget_usd = (
             session_budget_usd
@@ -59,6 +62,8 @@ class CostTelemetry:
         agent_name: str,
         run_id: str,
     ) -> CostEvent:
+        if tokens_in < 0 or tokens_out < 0:
+            raise ValueError("token counts must be non-negative")
         cost_usd = self.calculate_cost(model, tokens_in, tokens_out)
         event = CostEvent(
             model=model,
@@ -69,11 +74,14 @@ class CostTelemetry:
             run_id=run_id,
             cost_usd=cost_usd,
         )
-        self.events.append(event)
-        self.alert_budget_exceeded(run_id, self.session_budget_usd * 0.8)
+        with self._lock:
+            self.events.append(event)
+            self.alert_budget_exceeded(run_id, self.session_budget_usd * 0.8)
         return event
 
     def calculate_cost(self, model: str, tokens_in: int, tokens_out: int) -> float:
+        if tokens_in < 0 or tokens_out < 0:
+            raise ValueError("token counts must be non-negative")
         if model not in self.pricing:
             raise ValueError(f"Unknown model pricing for '{model}'")
         rates = self.pricing[model]
@@ -88,7 +96,12 @@ class CostTelemetry:
 
     def alert_budget_exceeded(self, run_id: str, threshold_usd: float) -> None:
         cost = self.get_run_cost(run_id)
-        if cost >= threshold_usd and self.budget_alert_handler is not None:
+        if (
+            cost >= threshold_usd
+            and self.budget_alert_handler is not None
+            and run_id not in self._alerted_runs
+        ):
+            self._alerted_runs.add(run_id)
             self.budget_alert_handler(run_id, cost, threshold_usd)
 
 
