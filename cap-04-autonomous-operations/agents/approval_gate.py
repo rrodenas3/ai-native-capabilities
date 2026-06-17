@@ -15,12 +15,13 @@ def approval_gate_node(state: dict[str, Any]) -> dict[str, Any]:
     if state.get("human_approval_status") in {"approved", "modified"}:
         return state
 
+    po_list = high_value_pos or state.get("po_drafts", [])
     payload = {
         "type": "cap04_human_approval_required",
         "run_id": state.get("run_id"),
-        "po_drafts": high_value_pos or state.get("po_drafts", []),
+        "po_drafts": po_list,
         "simulation_results": state.get("simulation_results", []),
-        "aggregate_value_usd": sum(float(po.get("value_usd", 0.0)) for po in high_value_pos),
+        "aggregate_value_usd": sum(float(po.get("value_usd", 0.0)) for po in po_list),
     }
     decision = interrupt(payload)
     status = str(decision.get("status", "rejected")) if isinstance(decision, dict) else "rejected"

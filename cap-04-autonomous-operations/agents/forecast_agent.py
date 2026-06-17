@@ -45,7 +45,9 @@ def forecast_demand(history: list[dict[str, Any]], *, horizon_days: int = 30) ->
         prior_avg = mean(prior) if prior else recent_avg
         trend = (recent_avg - prior_avg) / max(len(recent), 1)
         forecast_daily = max(0.0, recent_avg + trend * 7)
-        sigma = pstdev(recent) if len(recent) > 1 else forecast_daily * 0.1
+        sigma = pstdev(recent) if len(recent) > 1 else max(forecast_daily * 0.1, 0.01)
+        if sigma == 0:
+            sigma = max(forecast_daily * 0.1, 0.01)
         uncertainty = sigma / forecast_daily if forecast_daily > 0 else 1.0
         forecasts.append(
             {

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from statistics import mean, pstdev
 from typing import Any
 
@@ -12,7 +12,7 @@ class ExceptionDeduper:
         self.last_seen: dict[tuple[str, str], datetime] = {}
 
     def should_emit(self, event: dict[str, Any], now: datetime | None = None) -> bool:
-        now = now or datetime.utcnow()
+        now = now or datetime.now(UTC)
         key = (str(event.get("type")), str(event.get("sku", "*")))
         previous = self.last_seen.get(key)
         self.last_seen[key] = now
@@ -42,6 +42,9 @@ def detect_exceptions(state: dict[str, Any]) -> list[dict[str, Any]]:
         if supplier.get("supplier_failure"):
             events.append({"type": "supplier_failure", "sku": supplier["sku"], "severity": "critical"})
     for stock in state.get("stock_levels", []):
+        sku = stock.get("sku")
+        if not sku:
+            continue
         if float(stock.get("on_hand", 0.0)) <= float(stock.get("reorder_point", 0.0)):
-            events.append({"type": "stock_breach", "sku": stock["sku"], "severity": "high"})
+            events.append({"type": "stock_breach", "sku": sku, "severity": "high"})
     return events

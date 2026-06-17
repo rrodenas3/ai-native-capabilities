@@ -85,6 +85,12 @@ def build_graph(*, checkpointer: Any = None) -> CompiledStateGraph:
 
 
 def initial_state(*, run_id: str, sales_history: list[dict[str, Any]], stock_levels: list[dict[str, Any]], supplier_catalog: list[dict[str, Any]]) -> SupplyChainState:
+    if not sales_history:
+        raise ValueError("sales_history cannot be empty")
+    if not stock_levels:
+        raise ValueError("stock_levels cannot be empty")
+    if not supplier_catalog:
+        raise ValueError("supplier_catalog cannot be empty")
     return {
         "run_id": run_id,
         "trigger_type": "manual",

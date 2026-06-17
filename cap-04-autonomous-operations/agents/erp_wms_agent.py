@@ -19,7 +19,10 @@ def erp_wms_node(state: dict[str, Any]) -> dict[str, Any]:
     for po in state.get("po_drafts", []):
         if po.get("classification") == "HUMAN_APPROVAL" and not approved:
             continue
-        created = erp.create_po(po, approved=approved)
-        erp_writes.append(created)
-        wms_updates.append(wms.update_expected_receipt(created))
+        try:
+            created = erp.create_po(po, approved=approved)
+            erp_writes.append(created)
+            wms_updates.append(wms.update_expected_receipt(created))
+        except PermissionError:
+            continue
     return {**state, "erp_writes": erp_writes, "wms_updates": wms_updates}

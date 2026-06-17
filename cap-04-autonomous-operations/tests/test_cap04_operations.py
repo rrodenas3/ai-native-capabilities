@@ -137,6 +137,20 @@ def test_state_is_json_serialisable() -> None:
     json.dumps(state)
 
 
+def test_initial_state_rejects_empty_inputs() -> None:
+    try:
+        graph_module.initial_state(run_id="empty", sales_history=[], stock_levels=[], supplier_catalog=[])
+    except ValueError as exc:
+        assert "sales_history" in str(exc)
+    else:
+        raise AssertionError("empty sales history should fail")
+
+
+def test_exception_handler_skips_malformed_stock_rows() -> None:
+    events = exception_agent.detect_exceptions({"stock_levels": [{"on_hand": 0, "reorder_point": 1}]})
+    assert events == []
+
+
 def _read(path: Path) -> list[dict]:
     with path.open(encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
