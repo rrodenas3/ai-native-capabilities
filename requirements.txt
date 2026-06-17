@@ -82,3 +82,9 @@ mypy>=1.14.0
 # ── Evals (installed separately; not required for core operation) ───────────────
 # arize-phoenix>=8.0.0      # framework-agnostic RAG evals; OTEL-native; OSS
 # braintrust>=0.0.190       # structured A/B eval runs; CI gates; 1M spans/month free
+
+# ── Dashboard (optional) ───────────────────────────────────────────────────────
+# Install with: pip install -e ".[dashboard]"
+# fastapi>=0.115.0
+# uvicorn>=0.34.0
+# jinja2>=3.1.0

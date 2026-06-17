@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ai-native-capabilities dashboard</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7f9;
+      color: #111827;
+    }
+    body { margin: 0; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px; }
+    header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; margin-bottom: 24px; }
+    h1 { margin: 0; font-size: 32px; line-height: 1.1; }
+    h2 { margin: 24px 0 12px; font-size: 18px; }
+    h3 { margin: 0 0 8px; font-size: 15px; }
+    p { margin: 6px 0 0; color: #4b5563; }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    article { border: 1px solid #d7dce2; border-radius: 8px; padding: 16px; background: #fff; }
+
+    /* Score badge */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .badge-green  { background: #dcfce7; color: #166534; }
+    .badge-yellow { background: #fef9c3; color: #854d0e; }
+    .badge-red    { background: #fee2e2; color: #991b1b; }
+    .badge-gray   { background: #f3f4f6; color: #6b7280; }
+
+    /* Status label */
+    .status-label { font-size: 12px; color: #6b7280; margin-bottom: 10px; display: block; }
+
+    /* Action buttons */
+    button {
+      border: 1px solid #1f2937;
+      background: #1f2937;
+      color: white;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      margin-right: 6px;
+      font-size: 13px;
+    }
+    button.secondary { background: #fff; color: #1f2937; }
+    button.run-all {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    /* Metric table (inside <details>) */
+    details { margin-top: 10px; }
+    summary { cursor: pointer; font-size: 13px; color: #6b7280; user-select: none; }
+    summary:hover { color: #374151; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; }
+    th { text-align: left; padding: 4px 6px; color: #6b7280; font-weight: 500; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 3px 6px; border-bottom: 1px solid #f3f4f6; font-variant-numeric: tabular-nums; }
+    tr.metric-blocking td { color: #991b1b; font-weight: 600; }
+    tr.ssgm-row td:first-child::before { content: "🛡 "; }
+    tr.ssgm-pass { background: #f0fdf4; }
+    tr.ssgm-fail { background: #fef2f2; }
+
+    /* Output panel */
+    pre {
+      overflow: auto;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      min-height: 220px;
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root { background: #111827; color: #f9fafb; }
+      p, .status-label { color: #9ca3af; }
+      article { background: #1f2937; border-color: #374151; }
+      button.secondary { background: #111827; color: #f9fafb; border-color: #9ca3af; }
+      summary { color: #9ca3af; }
+      summary:hover { color: #e5e7eb; }
+      th { color: #9ca3af; border-bottom-color: #374151; }
+      td { border-bottom-color: #1f2937; }
+      tr.metric-blocking td { color: #fca5a5; }
+      tr.ssgm-pass { background: #052e16; }
+      tr.ssgm-fail { background: #450a0a; }
+      pre { background: #020617; }
+      .badge-green  { background: #14532d; color: #bbf7d0; }
+      .badge-yellow { background: #422006; color: #fde68a; }
+      .badge-red    { background: #450a0a; color: #fca5a5; }
+      .badge-gray   { background: #374151; color: #9ca3af; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>ai-native-capabilities</h1>
+        <p>Local launcher for demos and eval suites. Runs on 127.0.0.1 only by default.</p>
+      </div>
+      <div>
+        <button class="run-all secondary" onclick="runAllEvals()">Run all evals</button>
+        <button class="secondary" onclick="loadStatus()">Status</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      {% for cap_id, meta in caps.items() %}
+      {% set report = reports.get(cap_id, {}) %}
+      {% set score = report.get('score') %}
+      {% set status = report.get('status', '') %}
+      {% set blocking = report.get('blocking_failures', []) %}
+      {% set metrics = report.get('metrics', {}) %}
+
+      {% if score is none %}
+        {% set badge_class = 'badge-gray' %}
+        {% set score_str = '—' %}
+      {% elif score >= 0.85 %}
+        {% set badge_class = 'badge-green' %}
+        {% set score_str = '%.2f'|format(score) %}
+      {% elif score >= 0.50 %}
+        {% set badge_class = 'badge-yellow' %}
+        {% set score_str = '%.2f'|format(score) %}
+      {% else %}
+        {% set badge_class = 'badge-red' %}
+        {% set score_str = '%.2f'|format(score) %}
+      {% endif %}
+
+      <article>
+        <h3>{{ cap_id }}: {{ meta.name }}</h3>
+        <span class="badge {{ badge_class }}">{{ score_str }}</span>
+        {% if status %}
+          <span class="status-label">{{ status }}{% if blocking %} · {{ blocking|length }} blocking{% endif %}</span>
+        {% else %}
+          <span class="status-label">no report</span>
+        {% endif %}
+
+        {% if metrics %}
+        <details>
+          <summary>Metrics ({{ metrics|length }})</summary>
+          <table>
+            <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+            <tbody>
+              {% for metric_name, value in metrics.items() %}
+              {% set is_blocking = metric_name in blocking %}
+              {% set is_ssgm = metric_name == 'ssgm_quarantine_coverage' and cap_id in ssgm_caps %}
+              <tr class="
+                {%- if is_blocking %} metric-blocking{% endif %}
+                {%- if is_ssgm %} ssgm-row{% if value == 1.0 %} ssgm-pass{% else %} ssgm-fail{% endif %}{% endif %}
+              ">
+                <td>{{ metric_name }}</td>
+                <td>
+                  {%- if value is number %}{{ '%.4f'|format(value) }}
+                  {%- else %}{{ value }}{% endif -%}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </details>
+        {% endif %}
+
+        <div style="margin-top:12px;">
+          <button onclick="runEval('{{ cap_id }}')">Run eval</button>
+          <button class="secondary" onclick="runDemo('{{ cap_id }}')">Run demo</button>
+        </div>
+      </article>
+      {% endfor %}
+    </section>
+
+    <h2>Output</h2>
+    <pre id="output">Ready.</pre>
+  </main>
+
+  <script>
+    const output = document.getElementById('output');
+
+    async function post(path) {
+      output.textContent = 'Running ' + path + ' ...';
+      try {
+        const resp = await fetch(path, { method: 'POST' });
+        const data = await resp.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = 'Error: ' + err.message;
+      }
+    }
+
+    async function get(path) {
+      output.textContent = 'Fetching ' + path + ' ...';
+      try {
+        const resp = await fetch(path);
+        const data = await resp.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = 'Error: ' + err.message;
+      }
+    }
+
+    function loadStatus()    { get('/api/status'); }
+    function runEval(cap)    { post('/api/evals/' + encodeURIComponent(cap)); }
+    function runDemo(cap)    { post('/api/demos/' + encodeURIComponent(cap)); }
+    function runAllEvals()   { post('/api/evals/all'); }
+  </script>
+</body>
+</html>

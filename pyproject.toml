@@ -117,6 +117,7 @@ dashboard = [
 
 [project.scripts]
 health-check = "scripts.health_check:main"
+local-dashboard = "scripts.dashboard.main:main"
 run-evals = "scripts.run_evals:main"
 
 [tool.ruff]
