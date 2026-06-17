@@ -19,12 +19,14 @@ sys.modules[AGENT_SPEC.name] = agent_module
 AGENT_SPEC.loader.exec_module(agent_module)
 
 SCHEMA_PATH = Path(__file__).parents[1] / "schemas" / "brief.py"
-SCHEMA_SPEC = importlib.util.spec_from_file_location("cap01_brief_schema", SCHEMA_PATH)
-if SCHEMA_SPEC is None or SCHEMA_SPEC.loader is None:
-    raise RuntimeError(f"Unable to load brief schema from {SCHEMA_PATH}")
-schema_module = importlib.util.module_from_spec(SCHEMA_SPEC)
-sys.modules[SCHEMA_SPEC.name] = schema_module
-SCHEMA_SPEC.loader.exec_module(schema_module)
+schema_module = sys.modules.get("cap01_brief_schema")
+if schema_module is None:
+    SCHEMA_SPEC = importlib.util.spec_from_file_location("cap01_brief_schema", SCHEMA_PATH)
+    if SCHEMA_SPEC is None or SCHEMA_SPEC.loader is None:
+        raise RuntimeError(f"Unable to load brief schema from {SCHEMA_PATH}")
+    schema_module = importlib.util.module_from_spec(SCHEMA_SPEC)
+    sys.modules[SCHEMA_SPEC.name] = schema_module
+    SCHEMA_SPEC.loader.exec_module(schema_module)
 
 brief_agent_node = agent_module.brief_agent_node
 BriefOutput = schema_module.BriefOutput
