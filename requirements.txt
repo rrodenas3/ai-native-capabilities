@@ -43,10 +43,9 @@ pydantic-settings>=2.7.0
 
 # ── Vector store & retrieval ────────────────────────────────────────────────────
 # pgvector 0.7.x — production-grade under ~50M vectors (HNSW + IVFFlat)
-# pgvectorscale — higher throughput on same Postgres instance (Timescale)
+# pgvectorscale — Postgres extension (CREATE EXTENSION vectorscale); not installable via pip
 pgvector>=0.3.0
 psycopg[binary]>=3.2.0
-pgvectorscale>=0.4.0
 rank-bm25>=0.2.2            # lexical search leg of hybrid retrieval
 python-docx>=1.1.2          # DOCX parsing for Cap-01 ingestion
 pypdf>=5.0.0                # PDF parsing for Cap-01 ingestion
