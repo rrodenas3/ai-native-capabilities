@@ -30,6 +30,7 @@ htmlcov/
 # ── Reports (generated, not committed) ───────────────────────────────────────
 reports/
 *.eval.json
+.cap02-security-scan/
 
 # ── Notebooks (checkpoints only) ─────────────────────────────────────────────
 .ipynb_checkpoints/
