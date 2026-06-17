@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Check eval gates — enforces blocking metrics from capability specs.
+Check eval gates - enforces blocking metrics from capability specs.
 Called by GitHub Actions CI after each capability eval run.
 
 Usage:
@@ -21,7 +21,7 @@ try:
 except ImportError:
     HAS_RICH = False
 
-# Blocking metrics per capability — derived from each capability's SPEC.md
+# Blocking metrics per capability - derived from each capability's SPEC.md
 # These mirror the eval_scorecard blocking fields in the specs exactly.
 BLOCKING_METRICS: dict[str, list[tuple[str, float, bool]]] = {
     # (metric_name, threshold, lower_is_better)
@@ -120,7 +120,7 @@ def main() -> None:
         print(f"[{cap_id}] Eval suite status: {status}")
         if note:
             print(f"  Note: {note}")
-        print("  Skipping gate check — eval suite not yet implemented")
+        print("  Skipping gate check - eval suite not yet implemented")
         sys.exit(0)
 
     blocking = BLOCKING_METRICS.get(cap_id, [])
@@ -152,11 +152,11 @@ def main() -> None:
         table.add_column("Target", justify="right", width=10)
         table.add_column("Result", width=10)
 
-        for m, v, t, lib in blocking:
+        for m, t, lib in blocking:
             val = metrics.get(m, None)
             if val is None:
                 result = "[red]MISSING[/red]"
-                val_str = "[dim]—[/dim]"
+                val_str = "[dim]-[/dim]"
             elif check_metric(val, t, lib):
                 result = "[green]PASS[/green]"
                 val_str = f"[green]{fmt(val)}[/green]"
@@ -164,10 +164,10 @@ def main() -> None:
                 result = "[red]BLOCK[/red]"
                 val_str = f"[red]{fmt(val)}[/red]"
 
-            op = "≤" if lib else "≥"
+            op = "<=" if lib else ">="
             table.add_row(f"[bold]{m}[/bold]", val_str, f"{op} {fmt(t)}", result)
 
-        for m, v, t, lib in warnings:
+        for m, t, lib in warnings:
             val = metrics.get(m, None)
             if val is None:
                 continue
@@ -178,28 +178,28 @@ def main() -> None:
                 result = "[yellow]WARN[/yellow]"
                 val_str = f"[yellow]{fmt(val)}[/yellow]"
 
-            op = "≤" if lib else "≥"
+            op = "<=" if lib else ">="
             table.add_row(m, val_str, f"{op} {fmt(t)}", result)
 
-        console.print(f"\n[bold]{cap_id} — Eval Gates[/bold]")
+        console.print(f"\n[bold]{cap_id} - Eval Gates[/bold]")
         console.print(table)
     else:
-        print(f"\n{cap_id} — Eval Gates")
-        for m, v, t, lib in blocking:
+        print(f"\n{cap_id} - Eval Gates")
+        for m, t, lib in blocking:
             val = metrics.get(m, "MISSING")
-            op = "≤" if lib else "≥"
+            op = "<=" if lib else ">="
             status_str = "BLOCK" if isinstance(val, float) and not check_metric(val, t, lib) else "PASS"
-            print(f"  [BLOCKING] {m}: {val} (target {op} {t}) → {status_str}")
+            print(f"  [BLOCKING] {m}: {val} (target {op} {t}) -> {status_str}")
 
     if failures:
-        op_map = {True: "≤", False: "≥"}
+        op_map = {True: "<=", False: ">="}
         fail_lines = []
         for m, v, t, lib in failures:
             op = op_map[lib]
             got = "MISSING" if v == -1.0 else fmt(v)
-            fail_lines.append(f"  • {m}: got {got}, need {op} {t}")
+            fail_lines.append(f"  - {m}: got {got}, need {op} {t}")
 
-        msg = f"\n[{cap_id}] ✗ BLOCKING METRICS FAILED — PR cannot be merged\n"
+        msg = f"\n[{cap_id}] BLOCKING METRICS FAILED - PR cannot be merged\n"
         msg += "\n".join(fail_lines)
 
         if HAS_RICH:
@@ -211,14 +211,14 @@ def main() -> None:
 
     if warns:
         if HAS_RICH:
-            console.print(f"\n[yellow][{cap_id}] ⚠ {len(warns)} warning(s) — fix before next release[/yellow]\n")
+            console.print(f"\n[yellow][{cap_id}] {len(warns)} warning(s) - fix before next release[/yellow]\n")
         else:
             print(f"\n[{cap_id}] WARNINGS: {len(warns)} non-blocking issues")
 
     if HAS_RICH:
-        console.print(f"[green bold][{cap_id}] ✓ All blocking gates passed[/green bold]\n")
+        console.print(f"[green bold][{cap_id}] All blocking gates passed[/green bold]\n")
     else:
-        print(f"\n[{cap_id}] ✓ All blocking gates passed")
+        print(f"\n[{cap_id}] All blocking gates passed")
 
 
 if __name__ == "__main__":
