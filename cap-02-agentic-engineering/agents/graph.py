@@ -152,10 +152,14 @@ def _load_attr(module_name: str, relative_path: str, attr: str) -> Any:
     spec = importlib.util.spec_from_file_location(module_name, module_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load {attr} from {module_path}")
-    module = importlib.util.module_from_spec(spec)
-    if spec.name not in sys.modules:
+    if spec.name in sys.modules:
+        module = sys.modules[spec.name]
+    else:
+        module = importlib.util.module_from_spec(spec)
         sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
+        spec.loader.exec_module(module)
+    if not hasattr(module, attr):
+        raise RuntimeError(f"Loaded module {spec.name} does not expose {attr}")
     return getattr(module, attr)
 
 
