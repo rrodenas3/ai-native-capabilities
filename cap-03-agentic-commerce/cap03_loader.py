@@ -14,13 +14,16 @@ def load_attr(module_name: str, relative_path: str, attr: str) -> Any:
     existing = sys.modules.get(module_name)
     if existing is not None and hasattr(existing, attr):
         return getattr(existing, attr)
+    if existing is not None:
+        raise AttributeError(f"Module {module_name} does not have attribute {attr}")
     module_path = ROOT / relative_path
     spec = importlib.util.spec_from_file_location(module_name, module_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load {attr} from {module_path}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
+    loader = spec.loader
+    loader.exec_module(module)
     if not hasattr(module, attr):
         raise AttributeError(f"Module {module_name} does not have attribute {attr}")
     return getattr(module, attr)
