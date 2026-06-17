@@ -1,102 +1,121 @@
 # Cap-01: Decision Intelligence
 
-> *Transform scattered internal knowledge into cited, uncertainty-labelled, board-ready intelligence — in real time.*
+Transform scattered internal knowledge into cited, uncertainty-labelled, board-ready intelligence in real time.
 
-**Reference case:** Morgan Stanley — 98% advisor-team adoption, document access 20% → 80%
-**AI layers:** Augmented → Generative → Agentic RAG
-**Status:** `spec-complete` · implementation in progress
+**Reference case:** Morgan Stanley advisor assistant: high adoption through cited retrieval, eval-first release, and human accountability.
+**AI layers:** Augmented -> Generative -> Agentic RAG
+**Status:** implementation complete for Cap-01 baseline
 
----
-
-## The problem this solves
-
-Executives and knowledge workers drown in information but starve for insight. The average C-level leader can access only a fraction of their organisation's knowledge at decision time — the rest is buried in documents, presentations, and reports that no single person could hold in working memory.
-
-The result: decisions made on intuition, incomplete information, or last quarter's data.
-
-Morgan Stanley solved this for 16,000 financial advisors. Their system achieved 98% adoption not through features, but through three disciplined choices: **forced citations** (no answer without a source), **eval-first deployment** (every use case tested before launch), and **human accountability preserved** (advisor reviews before client-facing action).
-
-This capability applies the same pattern to executive decision-making.
-
----
-
-## What it builds
-
-```
-User query (natural language)
-      ↓
-Supervisor Agent         — decomposes, routes, governs
-      ↓
-Retrieval Agent          — hybrid search (semantic + BM25 + metadata)
-      ↓
-Analysis Agent           — synthesis, cross-reference, gap detection
-      ↓
-Verification Agent       — every claim checked against source
-      ↓
-Brief Assembly Agent     — structured output: findings + citations + confidence
-      ↓
-Human Review Gate        — required before any externally-actioned decision
-      ↓
-Episodic Memory          — learns from every session
-```
-
-**Output:** A structured brief with executive summary, key findings (each with citation and confidence score), uncertainty flags, and recommended next actions.
-
----
-
-## Eval gates
-
-| Metric | Target | Blocking |
-|---|---|---|
-| Citation accuracy | ≥ 0.95 | ✓ |
-| Hallucination rate | ≤ 0.02 | ✓ |
-| Retrieval recall | ≥ 0.85 | |
-| Source coverage | ≥ 0.80 | |
-| Response latency p95 | ≤ 30s | |
-| Human override rate | ≤ 0.15 | |
-| Brief usefulness (1–5) | ≥ 4.0 | |
-| Cost per brief | ≤ $0.50 | |
-
----
-
-## Quick start
+## Quick Start
 
 ```bash
-# From repo root (after python scripts/setup.py)
-python cap-01-decision-intelligence/demo.py
+# From the repo root
+$env:LLM_MODE="mock"
+python cap-01-decision-intelligence/demo.py --query "What are our three biggest supply chain risks entering Q3?"
 
-# Run evals
-python scripts/run_evals.py --cap cap-01
+# Non-interactive smoke test
+python cap-01-decision-intelligence/demo.py --query "What are our three biggest supply chain risks entering Q3?" --auto-approve
+
+# Capability evals
+python cap-01-decision-intelligence/evals/suite.py --output reports/cap01.json
+python scripts/check_eval_gates.py reports/cap01.json --capability cap-01
 ```
 
----
+The demo loads the committed 100-document synthetic corpus from `tests/fixtures/corpus`, retrieves relevant evidence, assembles a structured brief, pauses for human approval, records the decision, and prints cost/tokens for the run.
 
-## Implementation tasks
+## Architecture
+
+```mermaid
+flowchart TD
+    A[Strategic query] --> B[Supervisor Agent]
+    B --> C[Retrieval Agent]
+    C --> D[Analysis Agent]
+    D --> E[Verification Agent]
+    E --> F[Brief Assembly Agent]
+    F --> G[Human Review Gate]
+    G --> H[Episodic Memory]
+    H --> I[Cost Telemetry]
+    I --> J[Board-ready brief]
+```
+
+| Stage | Responsibility | Evidence Produced |
+|---|---|---|
+| Supervisor | Decompose query, set corpus scope, decide if web research is required | Sub-queries, routing audit event |
+| Retrieval | Hybrid-search internal corpus with access-tier enforcement | Ranked `RetrievalResult` objects |
+| Analysis | Synthesize themes, gaps, and contradictions | Analysis notes, evidence strength |
+| Verification | Check claims against retrieved chunks | Citation accuracy, unverified flags |
+| Brief Assembly | Build executive summary, findings, actions, confidence | `BriefOutput` with cited findings |
+| Human Gate | Pause for accountable review before storage/action | Approval/rejection audit event |
+| Episodic Memory | Store approved brief metadata for later learning | Memory event id |
+| Cost Telemetry | Track tokens, latency, cost, and budget alerts per hop | `cost_telemetry`, OTEL spans |
+
+## Eval Gates
+
+| Metric | Target | Blocking |
+|---|---:|---|
+| Citation accuracy | >= 0.95 | Yes |
+| Hallucination rate | <= 0.02 | Yes |
+| Retrieval recall | >= 0.85 | No |
+| Source coverage | >= 0.80 | No |
+| Response latency p95 | <= 30s | No |
+| Human override rate | <= 0.15 | No |
+| Brief usefulness | >= 4.0 | No |
+| Cost per brief | <= $0.50 | No |
+
+Current fixture suite: 20 deterministic evaluation cases in `tests/fixtures/cap01_eval_cases.json`.
+
+## Seed Corpus
+
+The demo/test corpus is generated by:
+
+```bash
+python cap-01-decision-intelligence/tests/fixtures/generate_corpus.py --output cap-01-decision-intelligence/tests/fixtures/corpus --seed 42
+```
+
+It contains 100 Markdown documents across supply chain, finance, customer, AI governance, and market domains. Access tiers are balanced across `public`, `internal`, and `restricted`, and the first 10 documents include five deliberate contradiction pairs for verification and uncertainty tests.
+
+## Demo Output
+
+The CLI prints a compact board-ready brief:
+
+```text
+Cap-01 Board-Ready Brief
+Summary      The evidence indicates that ...
+Confidence   0.82
+Cost         $0.00...
+Tokens       ...
+Human gate   approved
+Finding 1    Evidence highlights ... [source title]
+```
+
+## Implementation Tasks
 
 See [`specs/SPEC.md`](./specs/SPEC.md) for the complete BriefingScript.
 
 | Task | Description | Status |
 |---|---|---|
-| TASK-01-01 | pgvector index + document ingestion | `todo` |
-| TASK-01-02 | Hybrid retrieval (semantic + BM25) | `todo` |
-| TASK-01-03 | Supervisor Agent | `todo` |
-| TASK-01-04 | Retrieval Agent | `todo` |
-| TASK-01-05 | Analysis & Synthesis Agent | `todo` |
-| TASK-01-06 | Verification Agent | `todo` |
-| TASK-01-07 | Brief Assembly Agent | `todo` |
-| TASK-01-08 | LangGraph state machine | `todo` |
-| TASK-01-09 | Episodic memory | `todo` |
-| TASK-01-10 | Human Review Gate + audit log | `todo` |
-| TASK-01-11 | Eval suite | `todo` |
-| TASK-01-12 | Cost telemetry | `todo` |
-| TASK-01-13 | CLI demo | `todo` |
-
----
+| TASK-01-01 | pgvector index + document ingestion | `done` |
+| TASK-01-02 | Hybrid retrieval (semantic + BM25) | `done` |
+| TASK-01-03 | Supervisor Agent | `done` |
+| TASK-01-04 | Retrieval Agent | `done` |
+| TASK-01-05 | Analysis & Synthesis Agent | `done` |
+| TASK-01-06 | Verification Agent | `done` |
+| TASK-01-07 | Brief Assembly Agent | `done` |
+| TASK-01-08 | LangGraph state machine | `done` |
+| TASK-01-09 | Episodic memory | `done` |
+| TASK-01-10 | Human Review Gate + audit log | `done` |
+| TASK-01-11 | Eval suite | `done` |
+| TASK-01-12 | Cost telemetry | `done` |
+| TASK-01-13 | CLI demo | `done` |
+| TASK-01-14 | Seed corpus | `done` |
+| TASK-01-15 | README | `done` |
 
 ## Evidence
 
-- Morgan Stanley: 98% advisor adoption · document access 20%→80% — `[P]` OpenAI case study
-- Ramp Glass: role-aware context, first-interaction value — `[P]` company data
-- McKinsey 2025: only 39% reach enterprise EBIT impact — `[M]` n=1,993
+| Source | Claim | Grade |
+|---|---|---|
+| Morgan Stanley case study | Advisor-facing AI succeeds when answers are source-backed and reviewed by accountable humans | P |
+| Ramp Glass product pattern | Role-aware context and first-interaction value improve workflow adoption | P |
+| McKinsey 2025 AI survey | Enterprise EBIT impact remains uneven, making eval gates and operational discipline material | M |
 
-`[M]` = Measured (independent) · `[P]` = Partial (company-reported) · `[V]` = Vendor claim
+`M` = measured or independently supported. `P` = partial/company-reported. `V` = vendor claim.

@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
 from langgraph.checkpoint.memory import MemorySaver
 
+from core.observability.cost import CostTelemetry
 from core.schemas import CapabilityID, DocumentChunk, RetrievalResult
 from core.utils.settings import get_settings
 
@@ -93,10 +95,68 @@ def test_graph_completes_end_to_end_and_logs_audit(monkeypatch) -> None:
     assert output["key_findings"]
     assert output["overall_confidence"] > 0
     assert output["cost_telemetry"]["hop_count"] >= 5
+    assert output["cost_tokens_in"] > 0
+    assert output["cost_tokens_out"] > 0
+    assert output["cost_usd_total"] > 0
+    assert output["cost_telemetry"]["cost_per_brief_usd"] == output["cost_usd_total"]
+    assert all(hop.tokens_in > 0 for hop in output["agent_hops"])
+    assert all(hop.tokens_out > 0 for hop in output["agent_hops"])
+    assert all(hop.latency_ms >= 0 for hop in output["agent_hops"])
+    assert all(hop.cost_usd > 0 for hop in output["agent_hops"])
     event_types = [event.event_type for event in output["audit_trail"]]
     assert "brief.completed" in event_types
     assert "human_gate.approved" in event_types
     assert event_types.count("graph.transition") >= 6
+
+
+def test_graph_emits_agent_hop_spans(monkeypatch) -> None:
+    configure_mock_human_gate(monkeypatch)
+    traced_hops = []
+
+    @contextmanager
+    def trace_stub(hop):
+        traced_hops.append(hop)
+        yield
+
+    monkeypatch.setattr(module, "trace_agent_hop", trace_stub)
+    graph = build_graph(FakeRetriever(), checkpointer=MemorySaver())
+
+    output = graph.invoke(
+        initial_state(
+            "What are supply chain risks entering Q3?",
+            run_id="run-spans",
+            session_id="session-spans",
+        ),
+        config={"configurable": {"thread_id": "run-spans"}},
+    )
+
+    assert output["cost_telemetry"]["hop_count"] >= 5
+    assert {hop.agent_name for hop in traced_hops} >= {"supervisor", "brief_assembly"}
+    assert all(hop.tokens_in > 0 for hop in traced_hops)
+    assert all(hop.tokens_out > 0 for hop in traced_hops)
+
+
+def test_budget_alert_fires_once_when_run_crosses_threshold(monkeypatch) -> None:
+    configure_mock_human_gate(monkeypatch)
+    alerts = []
+    telemetry = CostTelemetry(
+        session_budget_usd=0.000001,
+        budget_alert_handler=lambda run_id, cost, threshold: alerts.append((run_id, cost, threshold)),
+    )
+    graph = build_graph(FakeRetriever(), checkpointer=MemorySaver(), cost_telemetry=telemetry)
+
+    graph.invoke(
+        initial_state(
+            "What are supply chain risks entering Q3?",
+            run_id="run-budget",
+            session_id="session-budget",
+        ),
+        config={"configurable": {"thread_id": "run-budget"}},
+    )
+
+    assert len(alerts) == 1
+    assert alerts[0][0] == "run-budget"
+    assert alerts[0][1] >= alerts[0][2]
 
 
 def test_graph_completes_for_10_diverse_queries_under_30s(monkeypatch) -> None:
@@ -137,9 +197,8 @@ def test_postgres_checkpointer_factory_is_context_manager() -> None:
 
 
 def test_postgres_checkpointer_rejects_invalid_url() -> None:
-    with pytest.raises(ValueError, match="Invalid PostgreSQL connection string"):
-        with build_postgres_checkpointer("sqlite://local"):
-            pass
+    with pytest.raises(ValueError, match="Invalid PostgreSQL connection string"), build_postgres_checkpointer("sqlite://local"):
+        pass
 
 
 def test_graph_records_error_state_when_node_fails(monkeypatch) -> None:
