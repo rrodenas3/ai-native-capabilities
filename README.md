@@ -1,97 +1,266 @@
-# ai-native-capabilities
+<div align="center">
 
-> **Five production-grade agentic AI capabilities. Built spec-first. Evaluated obsessively. Governed by design.**
+![ai-native-capabilities](docs/assets/hero-banner.png)
 
-This is not a tutorial repository. It is a working reference implementation of the five human capabilities most transformed by the convergence of augmented AI, generative AI, and agentic AI — built to the engineering standards of the companies that are actually winning this transformation.
+<br/>
 
-Every capability ships as a functional MVP with agent graphs, MCP connectors, evaluation suites, governance gates, and scaling roadmaps. Every design decision is evidence-grounded and documented.
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-3B6D11?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![LangGraph 1.0.5](https://img.shields.io/badge/LangGraph-1.0.5-534AB7?style=flat-square)](https://langchain.com/langgraph)
+[![MCP 2025-11-25](https://img.shields.io/badge/MCP-2025--11--25-0F6E56?style=flat-square)](https://modelcontextprotocol.io)
+[![Claude Sonnet 4.6](https://img.shields.io/badge/Claude-Sonnet_4.6-993C1D?style=flat-square)](https://anthropic.com)
+[![pgvector 0.7](https://img.shields.io/badge/pgvector-0.7.x-185FA5?style=flat-square)](https://github.com/pgvector/pgvector)
+[![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-1.29-854F0B?style=flat-square)](https://opentelemetry.io)
+[![49 open issues](https://img.shields.io/badge/build_queue-49_issues-444441?style=flat-square)](https://github.com/rrodenas3/ai-native-capabilities/issues)
+[![MIT License](https://img.shields.io/badge/License-MIT-A32D2D?style=flat-square)](./LICENSE)
+
+<br/>
+
+### Five production-grade agentic AI capabilities.<br/>Built spec-first. Evaluated obsessively. Governed by design.
+
+*Not a tutorial. A working reference implementation built to the engineering standards of the companies actually winning AI transformation — Walmart, Morgan Stanley, Ramp, Moderna, Harvey AI.*
+
+<br/>
+
+**[View Issues →](https://github.com/rrodenas3/ai-native-capabilities/issues)** &nbsp;·&nbsp; **[Read the Spec →](./cap-01-decision-intelligence/specs/SPEC.md)** &nbsp;·&nbsp; **[Start Building →](#quick-start)**
+
+</div>
 
 ---
 
-## Why this exists
+## The gap this closes
 
-The enterprise AI literature (McKinsey State of AI 2025, MIT NANDA GenAI Divide, Stanford AI Index 2026, Gartner Hype Cycle) converges on one uncomfortable finding: **88% of organisations use AI. Only 39% reach enterprise EBIT impact.** The gap is not model capability. It is architecture, evaluation, workflow redesign, and governance.
+<div align="center">
 
-This project closes that gap — one capability at a time — and documents every decision so others can adapt the patterns.
+| **88%** of orgs use AI | Only **39%** reach EBIT impact | **95%** of pilots fail P&L | **The gap is architecture** |
+|:---:|:---:|:---:|:---:|
+| McKinsey 2025, n=1,993 | McKinsey 2025 | MIT NANDA 2025 | Eval · Governance · Workflow redesign |
+
+</div>
+
+The constraint is not model capability. It is **architecture, evaluation, workflow redesign, and governance.** This project closes each one systematically, with every decision traced to production evidence.
 
 ---
 
-## The five capabilities
+## The three AI layers
 
-| # | Capability | Primary layer | Reference case | Status |
-|---|---|---|---|---|
-| 01 | [Decision Intelligence](./cap-01-decision-intelligence/) | Augmented → Agentic RAG | Morgan Stanley 98% adoption | `in-progress` |
-| 02 | [Agentic Software Engineering](./cap-02-agentic-engineering/) | Generative → SASE | Ramp 84% cross-role coding agents | `in-progress` |
-| 03 | [Agentic Revenue & Commerce](./cap-03-agentic-commerce/) | Agentic multi-agent | Walmart super-agent consolidation | `in-progress` |
-| 04 | [Autonomous Operations](./cap-04-autonomous-operations/) | Agentic stateful | Walmart + DHL + Flowr arXiv | `in-progress` |
-| 05 | [Compliance Intelligence](./cap-05-compliance-intelligence/) | Agentic RAG + KG | Harvey AI $11B · EU AI Act Aug 2026 | `in-progress` |
+![From augmented to agentic — the enterprise transformation stack](docs/assets/ai-stack-layers.png)
+
+Every capability is built across all three layers simultaneously. Augmented AI removes decision blindspots. Generative AI creates artifacts at scale. Agentic AI executes multi-step goals with human oversight. Most enterprise AI stalls at layer one — this project operates at all three.
+
+---
+
+## Cap-01 — Decision Intelligence
+
+![Cap-01 Decision Intelligence — 6-agent pipeline](docs/assets/cap01-agent-graph.png)
+
+**Strategic query in. Cited, verified, board-ready brief out.**
+
+Six agents in sequence. Every factual claim checked against its source by the Verification Agent before the Human Gate is reached. `citation_accuracy ≥ 0.95` is a blocking metric — the PR cannot merge without it.
+
+**Reference:** Morgan Stanley — 98% advisor-team adoption, document access 20% → 80%, using the same RAG-with-forced-citations pattern. `[P]`
+
+| Agent | Role | Model |
+|---|---|---|
+| Supervisor | Decomposes query into sub-tasks | `claude-sonnet-4-6` |
+| Retrieval | Hybrid search (semantic + BM25 + metadata filter) | — |
+| Analysis | Synthesis + contradiction + gap detection | `claude-opus-4-8` |
+| Verification | Every claim checked against source — no exceptions | `claude-opus-4-8` |
+| Brief Assembly | Executive summary + findings + citations + actions | `claude-sonnet-4-6` |
+| Human Gate | `interrupt()` — unbypassable by design | — |
+
+**Blocking evals:** `citation_accuracy ≥ 0.95` · `hallucination_rate ≤ 0.02` · [`SPEC →`](./cap-01-decision-intelligence/specs/SPEC.md)
+
+---
+
+## Cap-02 — Agentic Engineering (SASE)
+
+![Cap-02 Agentic Engineering — SASE pipeline](docs/assets/cap02-sase-graph.png)
+
+**BriefingScript in. Merge-Readiness Pack out. Security gate on every file.**
+
+Ramp achieved 84% of all employees — finance, marketing, ops — using coding agents weekly. The technical/non-technical boundary has dissolved. But unstructured agent use creates security risk: 29.5% of unscanned Copilot-generated Python contains weaknesses (Fu et al., ACM 2025). SASE provides the structure.
+
+**Reference:** Ramp 99.5% active AI users + SASE paper (Hassan et al., ACM 2026). `[P]` + `[M]`
+
+| Artifact | Owner | Purpose |
+|---|---|---|
+| BriefingScript | Human (Agent Coach) | Goal + acceptance criteria + Codex instructions |
+| LoopScript | Execution Agent | Self-monitoring iteration plan |
+| CRP | Execution Agent | Consultation when blocked — never guess |
+| MentorScript | Review Agent | Scores every acceptance criterion — no exceptions |
+| Merge-Readiness Pack | Execution Agent | The only artifact that reaches human review |
+
+**Blocking evals:** `briefing_completeness = 1.0` · `security_weakness_rate ≤ 5.0 per 1000 lines` · [`SPEC →`](./cap-02-agentic-engineering/specs/SPEC.md)
+
+---
+
+## Cap-03 — Agentic Commerce
+
+![Cap-03 Agentic Commerce — Sparky super-agent](docs/assets/cap03-sparky-graph.png)
+
+**Customer message in. Intent resolved, routed, handled, or escalated.**
+
+Walmart's lesson from agent sprawl: dozens of narrow bots create governance chaos. The solution is consolidation — a single orchestrated super-agent (Sparky) routing to specialist sub-agents via MCP. The Klarna lesson is embedded: CSAT is measured per complexity tier, not aggregate. Frustrated customers trigger immediate human handoff — no retries.
+
+**Reference:** Walmart super-agent consolidation (Sparky/Marty, 2025) · Lowe's Mylow 2× conversion. `[P]`
+
+| Agent | Role | Critical constraint |
+|---|---|---|
+| Sparky | Single customer entry point — routes by intent | `agent_sprawl_count ≤ 2` BLOCKING |
+| Discovery | Hybrid catalog search + ranking | Margin-negative items blocked from slot 1 |
+| Basket | Add · validate · promote · confirm | Order confirmation required before OMS write |
+| Support | Policy RAG + live OMS lookup | Never hallucinate order details — always fetch live |
+| Escalation | Immediate human handoff | `frustration_flag` → no retries, no delay |
+| Marty | Supplier / ops agent | Autonomous below $5K · human gate above |
+
+**Blocking evals:** `agent_sprawl_count ≤ 2` · `escalation_accuracy ≥ 0.90` · [`SPEC →`](./cap-03-agentic-commerce/specs/SPEC.md)
+
+---
+
+## Cap-04 — Autonomous Operations
+
+![Cap-04 Autonomous Operations — stateful supply chain](docs/assets/cap04-supply-chain-graph.png)
+
+**Demand signal in. Approved, simulated, audited ERP write out.**
+
+The most architecturally demanding capability. Supply chain tasks are long-running (hours to days), involve irreversible actions (purchase orders sent to suppliers), and require human approval above dollar thresholds. LangGraph's PostgreSQL durable execution is the architecture — not optional, not a preference.
+
+**Reference:** Flowr arXiv 2604.05987 · Walmart self-healing inventory · DHL 15% logistics cost reduction · Deutsche Telekom RAN Guardian. `[M]` + `[P]`
+
+The human approval gate is a LangGraph `interrupt()`. The graph physically cannot proceed past it without an explicit human decision. The digital twin runs before every action above the threshold. Both are blocking eval metrics at `= 1.00`.
+
+**Blocking evals:** `human_approval_coverage = 1.00` · `digital_twin_validation = 1.00` · [`SPEC →`](./cap-04-autonomous-operations/specs/SPEC.md)
+
+---
+
+## Cap-05 — Compliance Intelligence
+
+![Cap-05 Compliance Intelligence — regulatory pipeline](docs/assets/cap05-compliance-graph.png)
+
+**Regulatory feed in. Confirmed obligations, gap report, audit trail out.**
+
+Harvey AI reached $11B valuation and $190M ARR in this market. EU AI Act high-risk obligations enforce **August 2, 2026**. Fines reach **€35M or 7% of global turnover**. The critical design principle: a false negative on a regulatory obligation is potentially existential. Conservative extraction always — prefer false positives over false negatives.
+
+**Reference:** Harvey AI $11B · A&O Shearman 2-3h/week saved per lawyer · EU AI Act enforcement Aug 2026. `[P]` + `[M]`
+
+| Stage | Agent | Critical constraint |
+|---|---|---|
+| Monitor | Feed Monitor | EUR-Lex · Federal Register · NIST — continuous |
+| Classify | Classifier Agent | REGULATION / AMENDMENT / GUIDANCE / ENFORCEMENT |
+| Extract | **Interpretation Agent** | **`false_negative_rate ≤ 0.01` — the critical metric** |
+| Map | Knowledge Graph Agent | Regulation → Article → Obligation → UseCase (Neo4j) |
+| Review | Expert Gate | `interrupt()` — no obligation confirmed without sign-off |
+| Gap | Gap Mapping Agent | Use-case inventory vs confirmed obligations |
+
+**Blocking evals:** `false_negative_rate ≤ 0.01` · `citation_accuracy ≥ 0.98` · `expert_review_coverage = 1.00` · `query_answer_citation_rate = 1.00` · [`SPEC →`](./cap-05-compliance-intelligence/specs/SPEC.md)
+
+---
+
+## Spec-driven development
+
+![Spec-driven development loop](docs/assets/sdd-loop.png)
+
+**The BriefingScript is the source of truth. Not the code.**
+
+Every capability begins with a machine-readable `SPEC.md` before a single line of agent code is written. Codex and Claude Code implement from the spec. Evals verify against acceptance criteria. Blocking metrics prevent merge. Humans review output, not write it.
+
+```
+cap-XX/specs/SPEC.md
+├── goal_and_why              # business value + evidence grade [M/P/V]
+├── what_and_success          # acceptance criteria with measurable thresholds
+├── all_needed_context        # agent graph · state schema · MCP connectors
+├── implementation_tasks      # ordered tasks: TASK-XX-NN with dependencies
+├── failure_modes             # what breaks + how it's mitigated + tests
+├── eval_scorecard            # YAML blocking gates enforced in CI
+└── codex_instructions        # machine-readable directives for the agent
+```
+
+Feed any issue directly to Codex — no copy-paste:
+```bash
+gh auth login
+codex "$(gh issue view 10 --json title,body -q '.title + "\n\n" + .body')"
+```
+
+---
+
+## Evidence base
+
+![Built on production evidence](docs/assets/evidence-wall.png)
+
+Every architectural decision traces to documented production evidence. Evidence is graded:
+
+- `[M]` **Measured** — independent, quantified, peer-reviewed or audited
+- `[P]` **Partial** — company-reported, directionally credible
+- `[V]` **Vendor claim** — directional only, treat with caution
+
+Full library: [`docs/case-studies/`](./docs/case-studies/)
 
 ---
 
 ## Architecture principles
 
-**Spec-first.** Every capability begins with a machine-readable BriefingScript spec before a single line of agent code is written. Codex and Claude Code consume these specs. Humans review and approve the output.
+**Spec-first** — BriefingScript before code. Codex implements. Humans review output. The spec is the contract between human intent and agent execution.
 
-**MCP-native.** All tool integrations use the [Model Context Protocol](https://modelcontextprotocol.io) standard. No hardcoded API wrappers. Every connector is swappable.
+**MCP-native** — all tool integrations via [Model Context Protocol](https://modelcontextprotocol.io) (spec 2025-11-25, Streamable HTTP + OAuth 2.1). No hardcoded wrappers. Every connector swappable.
 
-**Eval-on-every-PR.** A common evaluation scorecard runs on every pull request. No capability ships without passing its quality gates. The eval is not an afterthought — it is the definition of done.
+**Eval on every PR** — common scorecard runs automatically. Blocking metrics prevent merge. The eval is the definition of done, not a post-launch check.
 
-**Governance by design.** A five-gate approval engine (use-case → data → action → quality → scale) is baked into the shared core, not bolted on. Human-in-the-loop checkpoints are explicit, not implicit.
+**Governance by design** — 5-gate engine (use-case → data → action → quality → scale) baked into `core/`. Human-in-the-loop via LangGraph `interrupt()` — not optional flags.
 
-**In-context before orchestration.** Following arXiv 2604.27891: multi-agent orchestration is used only when the task genuinely requires state, tool routing, memory, approvals, long-running execution, or specialised roles. For procedural tasks, a well-prompted frontier model is the default.
+**In-context before orchestration** — arXiv 2604.27891: multi-agent orchestration only when the task genuinely requires state, tool routing, memory, approvals, or long-running execution. A well-prompted frontier model is the default.
 
 ---
 
 ## Stack
 
-> Verified against production releases as of June 2026. Every version pinned and justified.
+> Verified June 2026. Every version pinned and justified. Full detail: [`docs/architecture/STACK.md`](./docs/architecture/STACK.md)
 
 ```
-Language         Python 3.13 (GIL-optional free-threaded mode; ~11% faster vs 3.12)
-                 TypeScript for MCP servers (official SDK: @modelcontextprotocol/sdk)
-
-Orchestration    LangGraph 1.0.5 — GA October 2025, stable API, no breaking changes
-                 until 2.0. Used by Uber, LinkedIn, Klarna, JP Morgan in production.
-                 Powers: stateful graphs · checkpointing · human-in-the-loop interrupt()
-                 · cross-thread memory · deferred node execution · streaming
-
-Protocol         MCP spec 2025-11-25 (current stable) · Streamable HTTP transport
-                 (SSE deprecated March 2025) · OAuth 2.1 + PKCE auth · 97M monthly
-                 SDK downloads · donated to Linux Foundation Agentic AI Foundation.
-                 Next spec RC: 2026-07-28 (stateless core + Tasks extension)
-
-Models           PRIMARY — Anthropic Claude (current API strings, June 2026):
-                   claude-opus-4-8        flagship, complex reasoning & long-horizon agents
-                   claude-sonnet-4-6      balanced, 79.6% SWE-bench at 40% lower cost
-                   claude-haiku-4-5-20251001  routing, classification, high-volume subagents
-                 NOTE: Claude 3.x fully retired April 2026. GPT-4o retired Feb 2026.
-
-                 SECONDARY — OpenAI (swappable via provider interface):
-                   gpt-5.5               current frontier (API available April 24 2026)
-                   gpt-5                 strong agentic & coding baseline
-                 NOTE: model strings are configured in settings.py, never hardcoded.
-
-Memory           pgvector 0.7.x (HNSW + IVFFlat; production-grade under ~50M vectors)
-                 + pgvectorscale for higher throughput on same Postgres instance
-                 Architecture: episodic (PostgreSQL events) · semantic (pgvector chunks)
-                   · procedural (Redis patterns) · long-term cross-thread (LangGraph store)
-                 Qdrant 1.9.x — evaluated as overflow option at 50M+ vectors
-
-Evals            LangSmith (deepest LangGraph integration; LangGraph Studio for replay)
-                 + Arize Phoenix OSS (framework-agnostic RAG evals; OTEL-native)
-                 + custom per-capability scorecard (YAML gates, CI-enforced)
-                 + Braintrust for structured A/B eval runs (free tier: 1M spans/month)
-
-Observability    OpenTelemetry (OTLP export) · cost telemetry (tokens × agentic
-                 multiplier, 5–30x vs single-turn) · LangSmith traces · FinOps alerts
-                 at 80% of session/run/monthly budget thresholds
-
-Security         bandit 1.8+ · semgrep 1.90+ (mandatory on all agent-generated code)
-                 MCP OAuth 2.1 with PKCE · least-privilege tool permissions · audit trail
-
-CI               GitHub Actions · eval suite on every PR · blocking metrics enforced
-                 · eval summary posted as PR comment · cost delta reported per run
+Language         Python 3.13 · GIL-optional free-threaded mode · TypeScript for MCP servers
+Orchestration    LangGraph 1.0.5 GA Oct 2025 · Uber · LinkedIn · JP Morgan · Blackrock
+Protocol         MCP spec 2025-11-25 · Streamable HTTP · OAuth 2.1 · Linux Foundation
+Models           claude-sonnet-4-6 (default) · claude-opus-4-8 (complex) · claude-haiku-4-5 (subagents)
+                 gpt-5.5 / gpt-5 (secondary, swappable) ⚠ Claude 3.x retired Apr 2026
+Memory           pgvector 0.7.x + pgvectorscale · episodic · semantic · procedural (Redis)
+Evals            LangSmith · Arize Phoenix OSS · custom YAML scorecard · Braintrust A/B
+Observability    OpenTelemetry OTLP · cost telemetry · FinOps alerts (5–30× agentic multiplier)
+Security         bandit 1.8+ · semgrep 1.90+ · mandatory on all agent-generated code
+CI               GitHub Actions · eval suite on every PR · blocking metrics · cost delta per run
 ```
+
+---
+
+## Quick start
+
+```bash
+git clone https://github.com/rrodenas3/ai-native-capabilities
+cd ai-native-capabilities
+python3.13 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+docker compose up -d
+cp .env.example .env                     # add ANTHROPIC_API_KEY
+python scripts/health_check.py
+python scripts/run_evals.py --all --mock  # no API cost in mock mode
+```
+
+---
+
+## Build order
+
+```
+Phase 1 — Core infrastructure        issues #1–#12  ← start here
+  #10 Settings → #1 Base graph → #2 MCP → #11 DB → #12 Health check
+  → #3 Governance → #4–6 Memory → #7 Evals → #8 Cost telemetry → #9 Schemas
+
+Phase 2 — Cap-01 Decision Intelligence   issues #13–#27
+Phase 3 — Cap-02 Agentic Engineering     issues #28–#52
+Phase 4 — Cap-03 Agentic Commerce        issues #36–#53
+Phase 5 — Cap-04 Autonomous Operations   issues #41–#45
+Phase 6 — Cap-05 Compliance Intelligence issues #46–#49
+```
+
+Proficiency ladder for contributors: [L0 → L3](./docs/playbooks/RAMP_L0_L3.md)
+Agent routing decisions: [When to use which model and pattern](./docs/architecture/AGENT_ROUTING.md)
 
 ---
 
@@ -99,109 +268,82 @@ CI               GitHub Actions · eval suite on every PR · blocking metrics en
 
 ```
 ai-native-capabilities/
-├── core/                        # Shared infrastructure (all capabilities build on this)
-│   ├── orchestration/           # LangGraph base graphs and state schemas
-│   ├── mcp/                     # MCP connector registry and base classes
-│   ├── memory/                  # Episodic, semantic, procedural memory layers
-│   ├── evals/                   # Common evaluation scorecard
-│   ├── governance/              # 5-gate approval engine
-│   ├── observability/           # OTEL setup, cost telemetry
-│   ├── schemas/                 # Shared Pydantic models
-│   └── utils/                   # Logging, retry, config
+├── core/                           # Shared infrastructure — build first
+│   ├── orchestration/              # LangGraph base graphs + state schemas
+│   ├── mcp/                        # MCP connector registry + base classes
+│   ├── memory/                     # Episodic · semantic · procedural
+│   ├── evals/                      # Common evaluation scorecard
+│   ├── governance/                 # 5-gate approval engine + human gate
+│   ├── observability/              # OTEL + cost telemetry
+│   ├── schemas/base.py             # Canonical Pydantic models (all capabilities)
+│   └── utils/                      # Settings · logging · retry · DB
 │
-├── cap-01-decision-intelligence/
-├── cap-02-agentic-engineering/
-├── cap-03-agentic-commerce/
-├── cap-04-autonomous-operations/
-├── cap-05-compliance-intelligence/
+├── cap-01-decision-intelligence/   # 6-agent RAG → board-ready brief
+├── cap-02-agentic-engineering/     # SASE: BriefingScript → MRP → human review
+├── cap-03-agentic-commerce/        # Sparky super-agent commerce mesh
+├── cap-04-autonomous-operations/   # Stateful supply chain · durable · approval gates
+├── cap-05-compliance-intelligence/ # Regulatory RAG + KG · EU AI Act · expert gate
 │
 ├── docs/
-│   ├── architecture/            # System diagrams, agent graphs
-│   ├── adr/                     # Architecture Decision Records
-│   ├── playbooks/               # Ramp L0-L3, Shopify mandate, Moderna
-│   ├── governance/              # EU AI Act mapping, NIST RMF
-│   └── case-studies/            # 40+ company evidence summaries
+│   ├── assets/                     # 9 visual assets (hero + 5 agent graphs + 3 diagrams)
+│   ├── architecture/               # STACK.md · AGENT_ROUTING.md · MEMORY_ARCHITECTURE.md
+│   ├── adr/                        # Architecture Decision Records
+│   ├── playbooks/                  # RAMP_L0_L3.md · Shopify mandate · Moderna
+│   └── case-studies/               # 40+ company evidence summaries
 │
-├── benchmarks/                  # Cross-capability comparison runs
-├── .github/workflows/           # CI: evals on every PR
-└── scripts/                     # Setup, seed data, demo runners
+├── benchmarks/                     # Cross-capability comparison runs
+├── scripts/                        # setup · health_check · run_evals · check_eval_gates
+└── .github/workflows/evals.yml     # CI: eval suite on every PR
 ```
-
----
-
-## Getting started
-
-```bash
-git clone https://github.com/YOUR_USERNAME/ai-native-capabilities
-cd ai-native-capabilities
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env          # Add your API keys
-python scripts/setup.py       # Seeds vector store, checks connectivity
-```
-
-Run the Decision Intelligence demo:
-```bash
-python cap-01-decision-intelligence/demo.py
-```
-
-Run the full eval suite:
-```bash
-python scripts/run_evals.py --all
-```
-
----
-
-## Spec-driven development workflow
-
-Each capability follows this loop:
-
-```
-SPEC (BriefingScript) → CODEX/CLAUDE CODE (implement) → EVAL (automated) → HUMAN REVIEW → MERGE
-```
-
-Specs live in `cap-XX/specs/`. They are the source of truth — not the code.
-
-To contribute a new capability or extend an existing one, start by writing or updating the spec. The CI pipeline will reject PRs where implementation diverges from the spec's acceptance criteria.
-
----
-
-## Evidence base
-
-Every architectural decision traces to documented production evidence. The evidence quality is graded:
-
-- `[M]` — Measured (independent, quantified results)
-- `[P]` — Partial (company-reported, directionally credible)
-- `[V]` — Vendor claim (directional only, treat with caution)
-
-See [`docs/case-studies/`](./docs/case-studies/) for the full evidence library.
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md). The short version: write the spec first, run the evals, document your evidence sources.
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+1. Read the spec for your capability: `cap-XX/specs/SPEC.md`
+2. Open the issue: `gh issue view N`
+3. Feed it to Codex: `codex "$(gh issue view N --json title,body -q '.title + "\n\n" + .body')"`
+4. Check the acceptance criteria checkboxes
+5. Run evals: `python scripts/run_evals.py --cap cap-XX`
+6. Open PR → CI runs blocking metrics → merge closes the issue
+
+Stuck? Raise a [Consultation Request](/.github/ISSUE_TEMPLATE/crp.md). Never guess.
 
 ---
 
 ## Roadmap
 
-- [ ] `core` — shared infrastructure complete
-- [ ] `cap-01` — Decision Intelligence MVP
-- [ ] `cap-02` — Agentic Engineering (SASE) MVP
-- [ ] `cap-03` — Agentic Commerce MVP
-- [ ] `cap-04` — Autonomous Operations MVP
-- [ ] `cap-05` — Compliance Intelligence MVP
-- [ ] Benchmark dashboard (compare all 5 side-by-side)
-- [ ] Web UI for each capability demo
+- [x] All 5 capability specs (BriefingScripts) — complete
+- [x] Core: base orchestration graph, MCP registry, episodic memory — merged
+- [x] 9 visual assets — hero banner, 5 agent graphs, 3 architecture diagrams
+- [ ] Core infrastructure complete (issues #4–#12)
+- [ ] Cap-01 Decision Intelligence MVP
+- [ ] Cap-02 Agentic Engineering MVP
+- [ ] Cap-03 Agentic Commerce MVP
+- [ ] Cap-04 Autonomous Operations MVP
+- [ ] Cap-05 Compliance Intelligence MVP
+- [ ] Benchmark dashboard — all 5 side-by-side
+- [ ] Interactive web demos per capability
 
 ---
 
-## License
+<div align="center">
 
-MIT — use it, adapt it, build on it. If you deploy a version of this in production, a star and a case study in the issues would be deeply appreciated.
+**Built by [Raul Rausell](https://github.com/rrodenas3)**
 
----
+*AI-native transformation architect · Translating business problems into governed agentic systems, functional MVPs, and scalable operating models*
 
-*Built at the intersection of AI research, enterprise transformation, and engineering discipline.*
-*Grounded in: McKinsey State of AI 2025 · MIT NANDA GenAI Divide · Stanford AI Index 2026 · SASE paper (Hassan et al.) · arXiv 2604.27891 · Flowr arXiv 2604.05987*
+<br/>
+
+*Grounded in: McKinsey State of AI 2025 · MIT NANDA GenAI Divide · SASE paper (Hassan et al., ACM 2026)*
+*arXiv 2604.27891 · Flowr arXiv 2604.05987 · EU AI Act · Anthropic API docs June 2026*
+
+<br/>
+
+⭐ **If you find this useful, a star helps others discover it.**
+
+[`github.com/rrodenas3/ai-native-capabilities`](https://github.com/rrodenas3/ai-native-capabilities)
+
+</div>
