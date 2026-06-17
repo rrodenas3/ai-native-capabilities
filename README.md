@@ -103,6 +103,8 @@ Ramp achieved 84% of all employees — finance, marketing, ops — using coding 
 
 ![Cap-03 Agentic Commerce — Sparky super-agent](docs/assets/cap03-sparky-graph.png)
 
+![ADR-003 Protocol Layering — MCP + A2A + ACP/UCP + AP2](docs/assets/protocol-stack.png)
+
 **Customer message in. Intent resolved, routed, handled, or escalated.**
 
 Walmart's lesson from agent sprawl: dozens of narrow bots create governance chaos. The solution is consolidation — a single orchestrated super-agent (Sparky) routing to specialist sub-agents via MCP. The Klarna lesson is embedded: CSAT is measured per complexity tier, not aggregate. Frustrated customers trigger immediate human handoff — no retries.
@@ -204,15 +206,21 @@ Full library: [`docs/case-studies/`](./docs/case-studies/)
 
 ## Architecture principles
 
-**Spec-first** — BriefingScript before code. Codex implements. Humans review output. The spec is the contract between human intent and agent execution.
+![Agent = Model + Harness — ADR-002 Harness Engineering](docs/assets/harness-engineering.png)
 
-**MCP-native** — all tool integrations via [Model Context Protocol](https://modelcontextprotocol.io) (spec 2025-11-25, Streamable HTTP + OAuth 2.1). No hardcoded wrappers. Every connector swappable.
+**Harness engineering** — `Agent = Model + Harness`. The canonical loop (PLAN→ACT→OBSERVE→VERIFY→CORRECT) runs inside a structured harness that validates every tool call before execution, enforces budget limits, and routes to human approval for financial or destructive actions. The harness quality — not the model quality — determines production reliability. Microsoft Azure SRE Agent: 40.5h → 3 min MTTM with the same models, better harness. [`ADR-002 →`](./docs/adr/ADR-002-harness-engineering.md)
 
-**Eval on every PR** — common scorecard runs automatically. Blocking metrics prevent merge. The eval is the definition of done, not a post-launch check.
+**Protocol layering** — MCP (tools) + A2A (agent coordination) + ACP/UCP (commerce checkout) + AP2 (payment mandates). Each protocol has a distinct responsibility. Never conflate them. [`ADR-003 →`](./docs/adr/ADR-003-protocol-layering.md)
 
-**Governance by design** — 5-gate engine (use-case → data → action → quality → scale) baked into `core/`. Human-in-the-loop via LangGraph `interrupt()` — not optional flags.
+**Spec-first** — BriefingScript before code. Codex implements. Humans review output. The spec is the contract between human intent and agent execution. [`ADR-001 →`](./docs/adr/ADR-001-spec-driven-development.md)
 
-**In-context before orchestration** — arXiv 2604.27891: multi-agent orchestration only when the task genuinely requires state, tool routing, memory, approvals, or long-running execution. A well-prompted frontier model is the default.
+**MCP-native** — all tool integrations via [Model Context Protocol](https://modelcontextprotocol.io) (spec 2025-11-25 → 2026-07-28 stateless). All servers implement stateless request handlers today. Every connector swappable.
+
+**Eval on every PR** — 8 common metrics + capability-specific gates. Computational sensors run every step (cheap). Inferential sensors (LLM-as-judge) run at quality gates. Judge model must differ from agent model family.
+
+**Governance by design** — 5-gate engine (use-case → data → action → quality → scale) in `core/`. Human `interrupt()` gates on financial/destructive actions — not optional flags.
+
+**In-context before orchestration** — arXiv 2604.27891: orchestration only when the task genuinely requires state, memory, approvals, or long-running execution. A well-prompted model is the default.
 
 ---
 

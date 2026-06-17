@@ -1,5 +1,7 @@
 # ADR-003: MCP Stateless Migration + Protocol Layering (MCP + A2A + ACP)
 
+![Protocol Layering — MCP + A2A + ACP/UCP + AP2](../../docs/assets/protocol-stack.png)
+
 **Date:** 2026-06-17
 **Status:** Accepted
 **Research basis:** Frontier Agentic AI Engineering Patterns Deep Research (June 2026)

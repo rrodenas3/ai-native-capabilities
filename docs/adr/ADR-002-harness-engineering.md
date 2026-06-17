@@ -1,5 +1,7 @@
 # ADR-002: Harness Engineering as the Cross-Cutting Discipline
 
+![Agent = Model + Harness](../../docs/assets/harness-engineering.png)
+
 **Date:** 2026-06-17
 **Status:** Accepted
 **Deciders:** Project maintainers
