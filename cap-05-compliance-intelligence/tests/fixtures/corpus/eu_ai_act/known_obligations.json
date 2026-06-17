@@ -1,0 +1,802 @@
+[
+  {
+    "article_reference": "Article 1",
+    "article_id": "article-001",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 2",
+    "article_id": "article-002",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 3",
+    "article_id": "article-003",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 4",
+    "article_id": "article-004",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 5",
+    "article_id": "article-005",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 6",
+    "article_id": "article-006",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 7",
+    "article_id": "article-007",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 8",
+    "article_id": "article-008",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 9",
+    "article_id": "article-009",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 10",
+    "article_id": "article-010",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 11",
+    "article_id": "article-011",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 12",
+    "article_id": "article-012",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 13",
+    "article_id": "article-013",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 14",
+    "article_id": "article-014",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 15",
+    "article_id": "article-015",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 16",
+    "article_id": "article-016",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 17",
+    "article_id": "article-017",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 18",
+    "article_id": "article-018",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 19",
+    "article_id": "article-019",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 20",
+    "article_id": "article-020",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 21",
+    "article_id": "article-021",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 22",
+    "article_id": "article-022",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 23",
+    "article_id": "article-023",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 24",
+    "article_id": "article-024",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 25",
+    "article_id": "article-025",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 26",
+    "article_id": "article-026",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 27",
+    "article_id": "article-027",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 28",
+    "article_id": "article-028",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 29",
+    "article_id": "article-029",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 30",
+    "article_id": "article-030",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 31",
+    "article_id": "article-031",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 32",
+    "article_id": "article-032",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 33",
+    "article_id": "article-033",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 34",
+    "article_id": "article-034",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 35",
+    "article_id": "article-035",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 36",
+    "article_id": "article-036",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 37",
+    "article_id": "article-037",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 38",
+    "article_id": "article-038",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 39",
+    "article_id": "article-039",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 40",
+    "article_id": "article-040",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 41",
+    "article_id": "article-041",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 42",
+    "article_id": "article-042",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 43",
+    "article_id": "article-043",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 44",
+    "article_id": "article-044",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 45",
+    "article_id": "article-045",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 46",
+    "article_id": "article-046",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 47",
+    "article_id": "article-047",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 48",
+    "article_id": "article-048",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 49",
+    "article_id": "article-049",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 50",
+    "article_id": "article-050",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 51",
+    "article_id": "article-051",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 52",
+    "article_id": "article-052",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 53",
+    "article_id": "article-053",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 54",
+    "article_id": "article-054",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 55",
+    "article_id": "article-055",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 56",
+    "article_id": "article-056",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 57",
+    "article_id": "article-057",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 58",
+    "article_id": "article-058",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 59",
+    "article_id": "article-059",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 60",
+    "article_id": "article-060",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 61",
+    "article_id": "article-061",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 62",
+    "article_id": "article-062",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 63",
+    "article_id": "article-063",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 64",
+    "article_id": "article-064",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 65",
+    "article_id": "article-065",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 66",
+    "article_id": "article-066",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 67",
+    "article_id": "article-067",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 68",
+    "article_id": "article-068",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 69",
+    "article_id": "article-069",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 70",
+    "article_id": "article-070",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 71",
+    "article_id": "article-071",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 72",
+    "article_id": "article-072",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 73",
+    "article_id": "article-073",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 74",
+    "article_id": "article-074",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 75",
+    "article_id": "article-075",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 76",
+    "article_id": "article-076",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 77",
+    "article_id": "article-077",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 78",
+    "article_id": "article-078",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 79",
+    "article_id": "article-079",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 80",
+    "article_id": "article-080",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 81",
+    "article_id": "article-081",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 82",
+    "article_id": "article-082",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 83",
+    "article_id": "article-083",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 84",
+    "article_id": "article-084",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 85",
+    "article_id": "article-085",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 86",
+    "article_id": "article-086",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 87",
+    "article_id": "article-087",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 88",
+    "article_id": "article-088",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 89",
+    "article_id": "article-089",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 90",
+    "article_id": "article-090",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 91",
+    "article_id": "article-091",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 92",
+    "article_id": "article-092",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 93",
+    "article_id": "article-093",
+    "obligation_type": "TRANSPARENCY",
+    "subject": "providers and deployers of AI systems that interact with persons",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers And Deployers Of Ai Systems That Interact With Persons shall inform natural persons that they are interacting with an AI system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 94",
+    "article_id": "article-094",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models must draw up and maintain technical documentation; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 95",
+    "article_id": "article-095",
+    "obligation_type": "GPAI",
+    "subject": "providers of general-purpose AI models",
+    "effective_date": "2025-08-02",
+    "anchor_text": "Providers Of General-Purpose Ai Models shall put in place a policy to comply with Union copyright law; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 96",
+    "article_id": "article-096",
+    "obligation_type": "GENERAL",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers are required to ensure a sufficient level of AI literacy for staff; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 97",
+    "article_id": "article-097",
+    "obligation_type": "PROHIBITED",
+    "subject": "providers and deployers",
+    "effective_date": "2025-02-02",
+    "anchor_text": "Providers And Deployers must not place prohibited AI practices on the Union market; non-compliance may be subject to administrative fines up to EUR 35M."
+  },
+  {
+    "article_reference": "Article 98",
+    "article_id": "article-098",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 99",
+    "article_id": "article-099",
+    "obligation_type": "HIGH_RISK",
+    "subject": "providers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Providers Of High-Risk Ai Systems shall keep automatically generated logs; non-compliance may be subject to administrative fines up to EUR 15M."
+  },
+  {
+    "article_reference": "Article 100",
+    "article_id": "article-100",
+    "obligation_type": "HIGH_RISK",
+    "subject": "deployers of high-risk AI systems",
+    "effective_date": "2026-08-02",
+    "anchor_text": "Deployers Of High-Risk Ai Systems must ensure human oversight by trained personnel; non-compliance may be subject to administrative fines up to EUR 15M."
+  }
+]
