@@ -134,6 +134,8 @@ def _best_citation(claim: str, retrieval_results: list[RetrievalResult]) -> Cita
         overlap = len(claim_terms & content_terms)
         score = overlap + result.combined_score
         scored.append((score, result))
+    if not scored:
+        return None
     scored.sort(key=lambda item: item[0], reverse=True)
     best = scored[0][1]
     metadata = best.chunk.metadata or {}
@@ -202,7 +204,8 @@ def _executive_summary(query: str, findings: list[Finding], uncertainty_flags: l
             "The brief should be treated as a request for additional source material before decision-making."
         )
     lead = findings[0].claim.rstrip(".")
-    summary = f"The evidence indicates that {lead[0].lower() + lead[1:] if lead else subject}."
+    lead_text = (lead[0].lower() + lead[1:]) if lead else subject
+    summary = f"The evidence indicates that {lead_text}."
     confidence = _overall_confidence(findings)
     if uncertainty_flags:
         return f"{summary} Overall confidence is {confidence:.2f}, with explicit uncertainties requiring review."
