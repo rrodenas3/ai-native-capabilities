@@ -120,10 +120,15 @@ def build_postgres_checkpointer(
     from langgraph.checkpoint.postgres import PostgresSaver
 
     resolved_url = database_url or get_settings().DATABASE_URL
-    with PostgresSaver.from_conn_string(resolved_url) as checkpointer:
-        if setup:
-            checkpointer.setup()
-        yield checkpointer
+    if not resolved_url.startswith(("postgresql://", "postgres://")):
+        raise ValueError("Invalid PostgreSQL connection string for LangGraph checkpointer")
+    try:
+        with PostgresSaver.from_conn_string(resolved_url) as checkpointer:
+            if setup:
+                checkpointer.setup()
+            yield checkpointer
+    except Exception as exc:
+        raise RuntimeError("Failed to initialize PostgreSQL checkpointer") from exc
 
 
 def initial_state(query: str, *, run_id: str, session_id: str, user_role: str = "executive") -> DecisionBriefState:
@@ -149,8 +154,42 @@ def initial_state(query: str, *, run_id: str, session_id: str, user_role: str = 
 def _with_transition_audit(name: str, node: Any):
     def wrapped(state: DecisionBriefState) -> dict[str, Any]:
         before = state.get("current_agent", "")
-        update = node(state)
-        audit_trail = list(update.get("audit_trail", state.get("audit_trail", [])))
+        if state.get("error_state"):
+            audit_trail = list(state.get("audit_trail", []))
+            audit_trail.append(
+                AuditEvent(
+                    capability=CapabilityID.DECISION_INTELLIGENCE,
+                    run_id=str(state.get("run_id", "")),
+                    session_id=str(state.get("session_id", "")),
+                    event_type="graph.transition",
+                    agent_name=name,
+                    action="node_skipped",
+                    payload={"from": before, "to": name, "reason": "error_state_present"},
+                )
+            )
+            return {"audit_trail": audit_trail}
+
+        try:
+            update = node(state)
+            audit_trail = list(update.get("audit_trail", state.get("audit_trail", [])))
+            success = True
+            payload: dict[str, Any] = {"from": before, "to": name}
+        except Exception as exc:
+            update = {
+                "current_agent": name,
+                "error_state": {
+                    "node": name,
+                    "error": str(exc),
+                    "error_type": type(exc).__name__,
+                },
+            }
+            audit_trail = list(state.get("audit_trail", []))
+            success = False
+            payload = {
+                "from": before,
+                "to": name,
+                "error_type": type(exc).__name__,
+            }
         audit_trail.append(
             AuditEvent(
                 capability=CapabilityID.DECISION_INTELLIGENCE,
@@ -158,8 +197,8 @@ def _with_transition_audit(name: str, node: Any):
                 session_id=str(state.get("session_id", "")),
                 event_type="graph.transition",
                 agent_name=name,
-                action="node_completed",
-                payload={"from": before, "to": name},
+                action="node_completed" if success else "node_failed",
+                payload=payload,
             )
         )
         return {**update, "audit_trail": audit_trail}
