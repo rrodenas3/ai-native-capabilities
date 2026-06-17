@@ -58,6 +58,7 @@ class SupplyChainState(TypedDict, total=False):
     erp_writes: list[dict[str, Any]]
     wms_updates: list[dict[str, Any]]
     audit_trail: list[dict[str, Any]]
+    quarantine_count: int
     cost_tokens: int
 
 
