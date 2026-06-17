@@ -93,6 +93,10 @@ ci = [
     "pytest-asyncio>=0.25.0",
     "fakeredis>=2.36.0",
     "semgrep>=1.90.0",         # Cap-02 security gate CLI (REQUIRE_SECURITY_SCANNERS)
+    "fastapi>=0.115.0",        # test_local_dashboard.py TestClient
+    "uvicorn>=0.34.0",
+    "jinja2>=3.1.0",
+    "httpx>=0.28.0",           # httpx backs FastAPI TestClient
 ]
 dev = [
     "pytest>=8.3.0",
