@@ -104,10 +104,8 @@ class CostTelemetry:
             self._alerted_runs.add(run_id)
             self.budget_alert_handler(run_id, cost, threshold_usd)
 
-
 def _session_budget_from_settings_or_env() -> float:
     try:
         return get_settings().SESSION_BUDGET_USD
     except ValueError:
         return float(os.getenv("SESSION_BUDGET_USD", "5.00"))
-
