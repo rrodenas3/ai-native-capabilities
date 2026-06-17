@@ -69,7 +69,7 @@ def decompose_query(query: str) -> list[str]:
 
 
 def determine_corpus_scope(query: str, existing_scope: Any = None) -> list[str]:
-    if existing_scope:
+    if existing_scope is not None:
         return list(existing_scope)
     lowered = query.lower()
     scope = ["internal-knowledge-base"]
