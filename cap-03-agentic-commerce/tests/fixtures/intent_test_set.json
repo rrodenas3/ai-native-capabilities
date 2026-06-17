@@ -1,0 +1,2002 @@
+[
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1006",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1005",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1004",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1003",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1002",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1007",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1001",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1006",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1007",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1009",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1006",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1007",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1008",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1006",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1007",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1007",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1006",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1007",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1006",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1006",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1005",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1005",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1004",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1004",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1003",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1003",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this grinder is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about backpack",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the headphones arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on laptop",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken jacket",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for coffee",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about espresso",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1002",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with speaker",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about camera",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me grinder category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse backpack",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for headphones",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in laptop",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for jacket",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare coffee versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between espresso and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is tablet better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "speaker vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two camera models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a grinder recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best backpack",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a headphones gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for laptop",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best jacket",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last coffee",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same espresso",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for tablet",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time speaker",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder camera please",
+    "intent": "REORDER"
+  },
+  {
+    "query": "where is order 1007",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "track shipment 1008",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "can I return order 1009",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "refund for order 1001",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "cancel order 1002",
+    "intent": "SUPPORT"
+  },
+  {
+    "query": "this coffee is terrible",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I have a complaint about espresso",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "the tablet arrived broken",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "unacceptable quality on speaker",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "refund now for broken camera",
+    "intent": "COMPLAINT"
+  },
+  {
+    "query": "I need a human for grinder",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "get me a manager about backpack",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "representative please for order 1001",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "legal issue with laptop",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "regulatory question about jacket",
+    "intent": "ESCALATION"
+  },
+  {
+    "query": "show me coffee category",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "browse espresso",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "what do you have for tablet",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "show me options in speaker",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "category list for camera",
+    "intent": "BROWSE"
+  },
+  {
+    "query": "compare grinder versus grinder",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "difference between backpack and tablet",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "is headphones better than speaker",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "laptop vs camera",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "compare two jacket models",
+    "intent": "COMPARISON"
+  },
+  {
+    "query": "I need a coffee recommendation",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "find me the best espresso",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "looking for a tablet gift",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "search for speaker",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "what is the best camera",
+    "intent": "DISCOVERY"
+  },
+  {
+    "query": "reorder my last grinder",
+    "intent": "REORDER"
+  },
+  {
+    "query": "buy again the same backpack",
+    "intent": "REORDER"
+  },
+  {
+    "query": "repeat order for headphones",
+    "intent": "REORDER"
+  },
+  {
+    "query": "same as last time laptop",
+    "intent": "REORDER"
+  },
+  {
+    "query": "reorder jacket please",
+    "intent": "REORDER"
+  }
+]
