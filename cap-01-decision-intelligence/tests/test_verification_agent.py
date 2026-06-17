@@ -9,7 +9,8 @@ from core.utils.settings import get_settings
 
 MODULE_PATH = Path(__file__).parents[1] / "agents" / "verification_agent.py"
 SPEC = importlib.util.spec_from_file_location("cap01_verification_agent", MODULE_PATH)
-assert SPEC and SPEC.loader
+if SPEC is None or SPEC.loader is None:
+    raise RuntimeError(f"Unable to load verification agent module from {MODULE_PATH}")
 module = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = module
 SPEC.loader.exec_module(module)

@@ -71,7 +71,8 @@ def extract_claims(analysis_notes: str) -> list[str]:
     claims = []
     for candidate in candidates:
         cleaned = candidate.strip(" -")
-        if not cleaned or ":" in cleaned[:24]:
+        label_prefix = cleaned[:24]
+        if not cleaned or ":" in label_prefix:
             continue
         if len(cleaned.split()) >= 4:
             claims.append(cleaned.rstrip("."))
