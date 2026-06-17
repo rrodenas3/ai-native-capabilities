@@ -82,6 +82,7 @@ dependencies = [
 [project.optional-dependencies]
 cap05 = [
     "neo4j>=5.27.0",
+    "falkordb>=1.0.0",         # graph layer for Cap-01/Cap-05 (alternative to Neo4j)
 ]
 qdrant = [
     # Overflow option at 50M+ vectors; Qdrant 1.9.x ~850 QPS at p95 ~8ms

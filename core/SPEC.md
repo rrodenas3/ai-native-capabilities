@@ -240,3 +240,106 @@ Settings are loaded from environment variables via core/utils/settings.py (pydan
 Docker Compose provides: PostgreSQL (+ pgvector), Redis, and optional Neo4j for Cap-05.
 The mock MCP implementations must behave identically to real ones for all test cases.
 ```
+
+---
+
+## frontier_improvements
+# Added: 2026-06-17 — based on Frontier Agentic AI Engineering Patterns research
+# See: docs/adr/ADR-002-harness-engineering.md
+# See: docs/adr/ADR-003-protocol-layering.md
+
+### core/harness — NEW module (ADR-002)
+
+```
+core/harness/
+├── loop.py           # Canonical agentic loop + stop conditions + CRP
+├── memory.py         # SSGM governed memory + A-MemGuard defense
+├── sensors.py        # Computational + inferential sensor registry
+├── risk.py           # Tool risk taxonomy + permission matrix
+└── golden_principles.py  # Anti-drift mechanism + artifact scoring
+```
+
+Primary types (see loop.py):
+  ToolRiskTier:          READ_ONLY | IDEMPOTENT | FINANCIAL | DESTRUCTIVE
+  LoopState:             iteration/budget/stop-condition tracking
+  ConsultationRequestPack: structured CRP with proposed solution
+  SensorResult:          passed/score/blocking per sensor run
+  SSGMGovernor:          SSGM memory validation pipeline (memory.py)
+
+### updated_common_metrics (core/evals)
+
+The 5 common metrics expand to 8 following frontier research:
+
+```python
+COMMON_METRICS = [
+    # Original 5 (unchanged)
+    "task_success_rate",
+    "human_override_rate",
+    "cost_per_task_usd",
+    "response_latency_p95_ms",
+    "hallucination_rate",
+
+    # New: CLEAR framework additions (frontier eval, 2026)
+    "trajectory_success_rate",      # did the full multi-step chain succeed?
+    "cross_turn_state_accuracy",    # ~20% blind spot: arXiv 2606.10315
+    "harness_security_score",       # injection/timeout/over-tooling defense
+]
+```
+
+CLEAR framework (Cost / Latency / Efficiency / Accuracy / Reliability):
+  - cost: `cost_per_task_usd` with OTEL `gen_ai.*` hop-level attribution
+  - latency: `response_latency_p95_ms` (p50 and p99 also tracked)
+  - efficiency: task_success_rate / cost_per_task_usd (value per dollar)
+  - accuracy: hallucination_rate + trajectory_success_rate
+  - reliability: cross_turn_state_accuracy + harness_security_score
+
+### otel_genai_conventions
+OTEL GenAI semantic conventions (v1.41, still Development status as of June 2026).
+Add to core/observability/telemetry.py:
+
+```python
+# gen_ai.* attributes — hop-level attribution
+span.set_attribute("gen_ai.system",        "anthropic")
+span.set_attribute("gen_ai.request.model", model)
+span.set_attribute("gen_ai.usage.input_tokens",  tokens_in)
+span.set_attribute("gen_ai.usage.output_tokens", tokens_out)
+span.set_attribute("gen_ai.usage.cache_read_input_tokens",    cache_read)
+span.set_attribute("gen_ai.usage.cache_creation_input_tokens", cache_write)
+span.set_attribute("gen_ai.cost.usd", cost_usd)
+span.set_attribute("gen_ai.operation.name", "chat")  # or "generate"
+
+# Agent-specific spans
+span.set_attribute("gen_ai.agent.name", agent_name)
+span.set_attribute("gen_ai.agent.hop_number", hop_number)
+span.set_attribute("gen_ai.tool.name",   tool_name)
+span.set_attribute("gen_ai.tool.tier",   tool_risk_tier)  # ADR-002
+```
+
+Note: OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai required to enable `gen_ai.*`.
+Attribute names are subject to change until GenAI conventions reach Stable.
+
+### mcp_migration_plan (ADR-003)
+
+Current target: MCP spec 2025-11-25 (stable).
+Migration target: MCP spec 2026-07-28 (RC final July 28, 2026).
+
+All MCP servers must be stateless NOW:
+  - Request handlers must not rely on server-side session state
+  - Session data passed as explicit handles per request
+  - Annotate stateful patterns: `# MCP-MIGRATE: session-to-handle`
+
+Phase 2 (post July 28):
+  - Drop `Mcp-Session-Id`; add `Mcp-Method`/`Mcp-Name` routing headers
+  - Move tasks to Tasks extension polling model
+  - Enable `ttlMs`/`cacheScope` on read-only tools
+  - Add Cloudflare Workers / Vercel / Lambda deployment manifests
+
+### new_core_tasks
+```
+TASK-CORE-13: core/harness/loop.py — canonical loop + stop conditions + CRP
+TASK-CORE-14: core/harness/memory.py — SSGM + A-MemGuard (already scaffolded)
+TASK-CORE-15: core/harness/sensors.py — sensor registry + eval wiring
+TASK-CORE-16: OTEL GenAI conventions (gen_ai.* attributes) in observability
+TASK-CORE-17: MCP stateless annotations (MCP-MIGRATE comments + compliance check)
+TASK-CORE-18: Braintrust A/B eval gates + regression testing in CI
+```

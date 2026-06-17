@@ -198,3 +198,85 @@ Structured A/B eval runs with CI/CD gates. Free tier: 1M spans/month, 10K evals.
 | ADR-003 (planned) | LangGraph over Microsoft Agent Framework | Cloud-agnostic; best human-in-the-loop; deepest observability with LangSmith |
 | ADR-004 (planned) | MCP Streamable HTTP over custom tool integrations | Industry standard, 97M monthly downloads, vendor-neutral |
 | ADR-005 (planned) | Dual eval (LangSmith + Arize Phoenix) | LangSmith for depth in LangGraph; Phoenix for RAG metrics and OTel-native export |
+
+---
+
+## Updates — June 17, 2026 (frontier research integration)
+
+### New: Harness Engineering layer (ADR-002)
+
+```
+core/harness/      Canonical agentic loop, SSGM governed memory,
+                   sensor registry, tool risk taxonomy, CRP format
+```
+
+**Agent = Model + Harness** (the defining 2026 equation).
+The harness quality, not the model quality, is the primary differentiator
+between the 11% of enterprises running agents at genuine production scale
+and the 88% still stuck at POC.
+
+### New: Protocol stack (ADR-003)
+
+```
+Tool access:        MCP 2025-11-25 (stable) → 2026-07-28 (RC final July 28)
+                    All servers: stateless request handlers from day one
+                    Routing: Mcp-Method/Mcp-Name headers (2026-07-28)
+                    Hosting: Cloudflare Workers/Vercel/Lambda (post-stateless)
+
+Agent coordination: A2A v1.0 (Linux Foundation, GA March 2026, 150+ orgs)
+                    Signed Agent Cards, gRPC+JSON-RPC, multi-tenancy
+                    Used in: Cap-03 (Sparky↔Marty), Cap-04 (exception events)
+
+Commerce (Cap-03):  ACP (OpenAI+Stripe) | UCP (Google+Shopify) — configurable
+                    AP2 (W3C Verifiable Credentials payment mandates)
+                    WebMCP (W3C, Chrome preview) — optional evaluation
+
+⚠ Naming: "UCP" = Universal Commerce Protocol (not "Context Protocol")
+  MCP remains the tool/context protocol. These are complementary.
+```
+
+### Updated: Evals
+
+```
+Primary:     LangSmith (LangGraph-native) + LangGraph Studio (state replay)
+RAG evals:   Arize Phoenix OSS (OTEL-native, self-hostable, RAGAS integration)
+Trajectory:  Agent-as-a-Judge (Zhuge et al.) — full trajectory, not just output
+CI gates:    Braintrust (A/B + regression; @braintrust/otel; 1M spans/month free)
+Framework:   CLEAR (Cost/Latency/Efficiency/Accuracy/Reliability)
+Judge rule:  Judge model MUST differ from agent model family (anti-self-preference)
+Blind spot:  Cross-turn state evals — catches ~20% P0 failures missed by output evals
+
+NEW common metrics (8 total):
+  task_success_rate · human_override_rate · cost_per_task_usd
+  response_latency_p95_ms · hallucination_rate
+  + trajectory_success_rate · cross_turn_state_accuracy · harness_security_score
+```
+
+### Updated: Memory
+
+```
+Flat retrieval:  pgvector 0.7.x + pgvectorscale (unchanged)
+Graph layer:     Neo4j/FalkorDB for Cap-01/Cap-05 multi-hop reasoning
+                 Property graph: Regulation→Article→Obligation→UseCase
+Self-linking:    A-MEM pattern (arXiv 2502.12110) — Zettelkasten notes
+Governance:      SSGM (arXiv 2603.11768) — consistency/decay/access control
+Poisoning def:   A-MemGuard (arXiv 2510.02373) — quarantine_threshold per cap
+Temporal:        Decay weights + valid_from/valid_until on all entries
+
+SSGM quarantine thresholds by capability:
+  Cap-05 (compliance): 0.3  — existential risk if obligation missed
+  Cap-04 (operations): 0.5  — financial risk if PO from bad memory
+  Cap-01 (decision):   0.6  — quality risk if brief from stale memory
+```
+
+### Updated: SWE-bench position (Cap-02)
+
+```
+SWE-bench Verified: SATURATED + partially contaminated (Claude Fable 5: 95.0%)
+                    OpenAI stopped reporting it Feb 2026.
+SWE-bench Pro:      Honest measure (standardized, 1,865 tasks, 250-turn scaffold)
+                    Opus 4.6 thinking: ~51.9%. Same model varies 15-16pts by harness.
+                    → Harness quality matters as much as model quality.
+Cap-02 evals:       Private-codebase eval set + DORA metrics + FP rate
+                    NOT SWE-bench Verified. Never cite vendor numbers.
+```

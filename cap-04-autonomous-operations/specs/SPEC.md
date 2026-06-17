@@ -377,3 +377,109 @@ When implementing this spec:
 9. Log every agent decision with: run_id, agent_name, decision_type, value_usd, confidence, timestamp.
 10. The synthetic data generator (TASK-04-10) must produce realistic demand patterns with: seasonality, trend, stockout events, demand spikes. Used by eval suite and demo.
 ```
+
+---
+
+## frontier_improvements
+# Added: 2026-06-17 — based on Frontier Agentic AI Engineering Patterns research
+
+### self_healing_operations
+**Finding:** Microsoft Azure SRE Agent (GA March 10, 2026) is the best-documented
+production self-healing agentic system. 1,300+ agents at Microsoft. 35,000+ incidents
+mitigated. 20,000+ engineering hours saved. App Service time-to-mitigation:
+40.5-hour human-only average → 3 minutes. Human-in-the-loop governance throughout.
+**Source:** Microsoft Azure SRE Agent GA announcement (March 2026)
+
+Apply the Azure SRE Agent pattern to Cap-04 exception handling:
+
+```
+DETECT:      Exception Handler watches for anomaly signals (already in SPEC)
+INVESTIGATE: Agent reads: inventory history, supplier data, forecast model output,
+             recent operational logs → structured root-cause analysis
+REMEDIATE:   Propose action (PO adjustment, supplier contact, route change)
+             → Digital twin simulation → Human approval gate (if above threshold)
+             → Execute → Verify resolution → Log to audit trail
+LEARN:       Distilled lesson stored in procedural memory (A-MEM skill note)
+             for next incident of same type
+```
+
+The detect→investigate→remediate loop is the Ralph-Wiggum loop pattern (arXiv
+2603.24768): run agent until external validation passes, with bounded retries.
+
+### ssgm_memory_governance
+**Finding:** Cap-04 is the highest-risk capability for memory poisoning.
+A malicious or corrupted supply chain signal → wrong PO → financial loss.
+SSGM governance (ADR-002, arXiv 2603.11768) is mandatory for all memory writes.
+
+```python
+# Every memory write in Cap-04 MUST go through SSGMGovernor
+governor = SSGMGovernor(
+    capability="cap-04",
+    decay_half_life_days=7.0,     # operational data decays fast
+    quarantine_threshold=0.5,     # moderate strictness
+)
+result = governor.validate_write(new_entry, existing_entries)
+if not result.validated:
+    queue_for_human_review(result)  # NEVER silently discard
+```
+
+Decay half-life calibration:
+  - Demand forecasts: 7 days (stale fast)
+  - Supplier lead times: 14 days
+  - Inventory snapshots: 1 day (real-time)
+  - Historical seasonal patterns: 180 days
+
+### heartbeat_proactive_scheduling
+**Finding:** OpenClaw's Heartbeat pattern (proactive polling, not just reactive
+event handling) is directly applicable to Cap-04's exception handler.
+
+Current design: exception handler REACTS to events.
+Improvement: exception handler also PROACTIVELY polls on a schedule:
+  - Every 4h: check all SKU stockout probabilities
+  - Every 1h: check supplier portal for lead-time updates
+  - Every 15m: check for demand spikes > 1σ (early warning before 2σ threshold)
+  - Daily: reconcile ERP PO status with WMS expected receipts
+
+This converts Cap-04 from reactive to continuously vigilant.
+
+### digital_twin_advancement
+**Finding:** Microsoft Supply Chain 2.0 (March 2026) documents production digital
+twins including Toyota Material Handling Europe forklift simulation (training time
+-30%+) and Azure Digital Twins platform for supply chain simulation.
+
+Upgrade Cap-04 digital twin from "simulate PO impact" to "simulate full supply
+chain state change":
+  - Inject proposed PO into full 30-day forward simulation
+  - Model supplier capacity constraints
+  - Model competing demand across product lines
+  - Output: probabilistic distribution of outcomes (not single point estimate)
+  - Confidence interval displayed in human approval gate
+
+### a2a_for_operations
+A2A v1.0 (Linux Foundation) for Cap-04 inter-system coordination:
+  - Exception Handler publishes events as A2A tasks to downstream systems
+  - Supplier agents receive A2A task requests (not direct API calls)
+  - ERP/WMS systems expose A2A endpoints for PO creation/receipt update
+
+### ramp_financial_agent_pattern
+**Finding:** Ramp's AP (Accounts Payable) agents demonstrate enterprise-grade
+financial agent patterns: auto-coding, fraud detection, approval workflow,
+payment execution, ERP sync (NetSuite/QBO/Xero/Sage/Workday/Oracle).
+Core principle: "never take money-moving actions without human confirmation."
+
+Apply to Cap-04 ERP integration:
+  - Auto-coding: classify POs to correct GL accounts automatically
+  - Fraud detection: flag anomalous PO patterns (unit price, quantity, supplier)
+  - Three-way matching: PO + receipt + invoice must reconcile before payment
+  - Human confirmation: required before ANY financial transaction executes
+
+### new_tasks_added
+```
+TASK-04-07: Heartbeat proactive scheduler (4h/1h/15m/daily polling schedule)
+TASK-04-08: Self-healing operations loop (detect→investigate→remediate + learnings)
+TASK-04-09: SSGM memory governance wiring with calibrated decay half-lives
+TASK-04-10: Enhanced digital twin (probabilistic distribution, full-chain simulation)
+TASK-04-11: A2A event publishing for exception handler + supplier coordination
+TASK-04-12: Ramp-pattern financial agent (fraud detection, three-way matching)
+TASK-04-13: Persistent agent identity records across process restarts
+```

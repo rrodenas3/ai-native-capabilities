@@ -213,19 +213,24 @@ Full library: [`docs/case-studies/`](./docs/case-studies/)
 
 ## Stack
 
-> Verified June 2026. Every version pinned and justified. Full detail: [`docs/architecture/STACK.md`](./docs/architecture/STACK.md)
+> Verified June 2026 + frontier research integration. Full detail: [`docs/architecture/STACK.md`](./docs/architecture/STACK.md)
 
 ```
-Language         Python 3.13 · GIL-optional free-threaded mode · TypeScript for MCP servers
+Language         Python 3.13 · GIL-optional free-threaded · TypeScript for MCP servers
 Orchestration    LangGraph 1.0.5 GA Oct 2025 · Uber · LinkedIn · JP Morgan · Blackrock
-Protocol         MCP spec 2025-11-25 · Streamable HTTP · OAuth 2.1 · Linux Foundation
+                 + core/harness/ — canonical loop · SSGM memory · sensor registry (ADR-002)
+Protocol         MCP 2025-11-25 (→ 2026-07-28 stateless) · A2A v1.0 (Linux Foundation)
+                 Cap-03: ACP/UCP commerce + AP2 payment mandates (ADR-003)
 Models           claude-sonnet-4-6 (default) · claude-opus-4-8 (complex) · claude-haiku-4-5 (subagents)
-                 gpt-5.5 / gpt-5 (secondary, swappable) ⚠ Claude 3.x retired Apr 2026
-Memory           pgvector 0.7.x + pgvectorscale · episodic · semantic · procedural (Redis)
-Evals            LangSmith · Arize Phoenix OSS · custom YAML scorecard · Braintrust A/B
-Observability    OpenTelemetry OTLP · cost telemetry · FinOps alerts (5–30× agentic multiplier)
-Security         bandit 1.8+ · semgrep 1.90+ · mandatory on all agent-generated code
-CI               GitHub Actions · eval suite on every PR · blocking metrics · cost delta per run
+                 gpt-5.5 / gpt-5 (judge models — must differ from agent family)
+Memory           pgvector 0.7.x + pgvectorscale + Neo4j/FalkorDB (graph layer)
+                 SSGM governed writes · A-MEM self-linking · A-MemGuard defense
+Evals            LangSmith · Arize Phoenix OSS · Braintrust A/B+regression
+                 CLEAR framework · Agent-as-a-Judge trajectory · 8 common metrics
+                 ⚠ Cap-02: private-codebase evals only — SWE-bench Verified saturated
+Observability    OpenTelemetry OTLP + OTEL GenAI gen_ai.* conventions (hop-level cost)
+Security         bandit 1.8+ · semgrep 1.90+ · harness security eval · golden principles
+CI               GitHub Actions · evals every PR · blocking metrics · cost delta · harness audit
 ```
 
 ---
@@ -318,13 +323,16 @@ Stuck? Raise a [Consultation Request](/.github/ISSUE_TEMPLATE/crp.md). Never gue
 - [x] All 5 capability specs (BriefingScripts) — complete
 - [x] Core: base orchestration graph, MCP registry, episodic memory — merged
 - [x] 9 visual assets — hero banner, 5 agent graphs, 3 architecture diagrams
-- [ ] Core infrastructure complete (issues #4–#12)
-- [ ] Cap-01 Decision Intelligence MVP
-- [ ] Cap-02 Agentic Engineering MVP
-- [ ] Cap-03 Agentic Commerce MVP
-- [ ] Cap-04 Autonomous Operations MVP
-- [ ] Cap-05 Compliance Intelligence MVP
-- [ ] Benchmark dashboard — all 5 side-by-side
+- [x] Frontier research integration — harness engineering, SSGM, protocols, evals
+- [x] ADR-002 (harness engineering) + ADR-003 (protocol layering) — documented
+- [x] core/harness/ scaffolded — canonical loop, SSGM memory, golden principles
+- [ ] Core infrastructure complete (issues #4–#12 + new #13–#18)
+- [ ] Cap-01 Decision Intelligence MVP (+ adaptive RAG, temporal RAG, A-MEM)
+- [ ] Cap-02 Agentic Engineering MVP (+ private-codebase evals, SKILL.md library)
+- [ ] Cap-03 Agentic Commerce MVP (+ A2A cards, ACP/UCP, AP2 mandates)
+- [ ] Cap-04 Autonomous Operations MVP (+ self-healing loop, SSGM, Heartbeat)
+- [ ] Cap-05 Compliance Intelligence MVP (+ GraphRAG, multi-judge, LAB benchmark)
+- [ ] Benchmark dashboard — all 5 capabilities side-by-side (CLEAR framework)
 - [ ] Interactive web demos per capability
 
 ---

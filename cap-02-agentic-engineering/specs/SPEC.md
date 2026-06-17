@@ -409,3 +409,94 @@ When implementing this spec:
 9. When uncertain about architecture decisions, write a CRP with your proposed solution and tradeoffs.
 10. Briefing reuse is a first-class feature. Always search the Briefing Library before starting from scratch.
 ```
+
+---
+
+## frontier_improvements
+# Added: 2026-06-17 — based on Frontier Agentic AI Engineering Patterns research
+
+### swe_bench_reality_check
+**Finding (CRITICAL):** SWE-bench Verified is saturating and partially contaminated
+as of June 2026 (Claude Fable 5: 95.0%, Opus 4.8: 88.6%). OpenAI stopped reporting
+it in Feb 2026 ("no longer measures frontier coding progress").
+SWE-bench Pro (Scale SEAL, standardized 250-turn scaffolding, 1,865 tasks) is the
+honest measure: Opus 4.6 thinking ~51.9%, GPT-5.4 xHigh ~59.1%.
+Same base model varies 15–16 points by scaffold alone.
+→ **Do not cite Verified numbers. Build private-codebase evals instead.**
+
+Security reality (Apiiro Sept 2025, 7,000+ devs, 62,000 repos, Fortune 50):
+AI-generated code introduced >10,000 new security findings/month by June 2025 —
+a 10× spike vs December 2024. Privilege-escalation paths +322%. Architectural
+design flaws +153%. This is the empirical case for the Cap-02 security gate.
+
+### harness_engineering_for_sase
+Following ADR-002, Cap-02 adopts the full harness discipline:
+
+**Canonical loop for the Execution Agent:**
+```
+PLAN:    agent proposes structured code change (never direct file write)
+ACT:     harness validates: schema ✓ · file-path allowed ✓ · budget ✓ → writes
+OBSERVE: run linter + fast tests → structured result (not raw terminal output)
+VERIFY:  CitationSensor (tests reference the criteria they claim to test)
+         SchemaSensor (generated code matches BriefingScript interface spec)
+CORRECT: if fail → retry up to 3× → raise CRP with proposed solution
+```
+
+**Deterministic blocking gates** (not prompt-instructed — wired in CI):
+  - ruff check → block on any error
+  - mypy --strict → block on any error
+  - pytest → block if any test fails
+  - bandit + semgrep → block on any CRITICAL finding
+  - briefing_completeness == 1.0 → block if BriefingScript is incomplete
+
+**CRITICAL:** Model never writes files directly. Proposed write → harness validates
+path is within allowed scope → executes. Prevents prompt-injection → RCE.
+
+### portable_skill_format
+**Finding:** OpenClaw's SKILL.md and agentskills.io define portable, inspectable
+skill artifacts that survive framework changes. Apply to Cap-02.
+
+Each reusable engineering runbook becomes a SKILL.md:
+```yaml
+---
+name: add-pydantic-model
+description: Add a new Pydantic v2 model to a capability's schemas
+inputs: [model_name, fields_yaml, capability_id]
+outputs: [file_path, import_statement]
+examples: [cap-01/schemas/brief_output.py]
+tests: [cap-02/tests/fixtures/skill_tests/test_add_pydantic_model.py]
+---
+[implementation notes and context for the agent]
+```
+
+Skills are version-controlled in `cap-02/skills/` and indexed in the Briefing Library.
+`briefing_reuse_rate` target rises from 0.30 to 0.40 with a skill library.
+
+### multi_agent_se_pattern
+**Finding:** Confucius Code Agent (Meta/Harvard, Feb 2026) uses a structured
+multi-agent pattern: orchestrator → specialized research/implement/review/QA
+workers, each returning verifiable artifacts. 59% Resolve@1 on SWE-bench Pro.
+
+Apply to Cap-02's complex BriefingScripts:
+  - Research Agent: reads codebase context, outputs context brief
+  - Implementation Agent: writes code against brief + context
+  - Review Agent (MentorScript): scores against acceptance criteria
+  - Security Agent: bandit + semgrep + architecture review
+  Orchestrated by the ACE graph; each worker returns a verifiable artifact.
+
+### updated_eval_methodology
+Replace SWE-bench Verified with:
+  1. Private-codebase eval set (20 real tasks from this repo's own issues)
+  2. DORA metrics (deployment frequency, MTTR, change failure rate)
+  3. False-positive rate (security scanner false alarm rate)
+  4. Harness security eval (prompt injection, tool timeout, over-tooling)
+
+### new_tasks_added
+```
+TASK-02-12: Canonical agentic loop + harness sensor wiring in Execution Agent
+TASK-02-13: Harness security eval suite (injection, timeout, over-tooling)
+TASK-02-14: Portable SKILL.md library (format, indexing, Briefing Library integration)
+TASK-02-15: Multi-agent SE orchestration (specialized workers + verifiable artifacts)
+TASK-02-16: Private-codebase eval harness + DORA metrics
+TASK-02-17: Deterministic blocking CI gates (ruff/mypy/pytest/bandit — wired, not prompted)
+```

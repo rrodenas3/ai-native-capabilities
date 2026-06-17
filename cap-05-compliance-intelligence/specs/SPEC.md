@@ -364,3 +364,153 @@ When implementing this spec:
 9. Confidence scores below 0.6 trigger mandatory expert review regardless of obligation type.
 10. Log everything: extraction runs, KG updates, expert decisions, gap detections, query responses. The audit trail is the product.
 ```
+
+---
+
+## frontier_improvements
+# Added: 2026-06-17 — based on Frontier Agentic AI Engineering Patterns research
+
+### eu_ai_act_enforcement_reality
+**Finding:** EU AI Act enforcement dates are confirmed and imminent.
+**Source:** EU AI Act official timeline + AI omnibus Political Agreement May 7, 2026
+
+```
+LIVE NOW (Feb 2, 2025):     Prohibited practices + AI literacy obligations
+LIVE NOW (Aug 2, 2025):     GPAI model obligations + GPAISR (>10²⁵ FLOPs)
+AUG 2, 2026 — KEY DATE:     High-risk Annex III + transparency (Art. 50)
+                            AI governance structure operational
+                            Commission GPAI enforcement powers (fines ≤ 3% / €15M)
+AUG 2, 2027:                Pre-Aug-2025 GPAI models must comply
+                            Product-embedded high-risk (amended by omnibus)
+```
+
+**GPAI Code of Practice (July 2025):** Transparency/Copyright/Safety chapters.
+Conformity gives "presumption of conformity" safe harbor — implement it.
+
+**Digital Omnibus (trilogue, proposal):** PROPOSES delaying some Annex III
+high-risk to Dec 2, 2027. DO NOT rely on this — plan for Aug 2, 2026.
+
+**GDPR × AI Act dual framework:** Art. 82 GDPR damages claims can compound AI Act
+non-compliance. Both frameworks must be modeled simultaneously in the obligation KG.
+
+### harvey_lab_benchmark
+**Finding:** Harvey AI released LAB (Legal Agent Benchmark, May 2026) — open-source,
+1,250 tasks across 24 practice areas, long-horizon, multi-step.
+**Source:** Harvey AI blog (harvey.ai/blog/introducing-harveys-legal-agent-benchmark)
+
+Cap-05's eval methodology should align with LAB's approach:
+  - Long-horizon tasks (not single-turn Q&A)
+  - Multi-step reasoning across multiple regulatory documents
+  - Practice-area specificity (not just "compliance")
+  - Trajectory-level scoring (not just output accuracy)
+
+New eval metric (add to eval_scorecard):
+  lab_alignment_score:
+    description: Task completion rate on LAB-style long-horizon regulatory tasks
+    threshold: >= 0.70
+    measurement: private subset of LAB-style tasks from EU AI Act corpus
+
+### graph_rag_for_compliance
+**Finding:** GraphRAG wins on relationship-heavy, multi-hop queries — exactly
+the compliance use case. "Do We Still Need GraphRAG?" (arXiv 2604.09666) confirms:
+GraphRAG still outperforms agentic dense RAG on regulation → article → obligation
+→ use-case multi-hop chains. The offline preprocessing cost IS justified here.
+
+**Hybrid architecture (pgvector + property graph):**
+```
+pgvector:      semantic search over regulation text chunks
+Neo4j/FalkorDB: Regulation → Article → Obligation → UseCase → Owner → Deadline
+               Amendment tracking (obligation version graph)
+               GDPR × AI Act cross-references
+               Temporal graph (validity_from / validity_until per obligation node)
+```
+
+**Temporal knowledge graph:** every obligation node has:
+  - `valid_from: datetime`
+  - `valid_until: datetime | None`
+  - `superseded_by: ObligationNode | None`
+  - `amendment_history: list[Amendment]`
+
+This directly addresses the "semantically relevant but no longer valid" failure mode.
+
+### multi_judge_panel
+**Finding:** Single LLM-as-judge misses ~1 in 5 production P0 failures in
+multi-turn agents. For Cap-05 (highest stakes), a multi-judge panel is required.
+**Source:** arXiv 2606.10315 "Catching One in Five" (June 2026)
+
+Cap-05 evaluation uses a 3-judge panel for obligation extraction:
+  - Judge 1 (legal perspective): does this read as a binding obligation?
+  - Judge 2 (technical perspective): is the subject/action/deadline specified?
+  - Judge 3 (regulator perspective): would a regulator expect compliance here?
+  Majority vote required. All three must agree for CONFIRMED status.
+  All judges MUST differ from the extraction agent model family (ADR-002).
+
+### ssgm_for_compliance
+**Finding:** Cap-05 has the highest SSGM governance requirements.
+A poisoned obligation (injected via regulatory feed manipulation) → false compliance
+→ regulatory violation → up to €35M fine.
+
+SSGM configuration for Cap-05:
+```python
+governor = SSGMGovernor(
+    capability="cap-05",
+    decay_half_life_days=90.0,    # regulatory obligations decay slowly
+    quarantine_threshold=0.3,     # very strict — errors are existential
+)
+```
+
+Memory write classification for Cap-05:
+  - EXTERNAL (from EUR-Lex, Federal Register): full SSGM validation mandatory
+  - INFERRED (LLM-extracted obligation): full SSGM + multi-judge confirmation
+  - HUMAN (expert-reviewed and confirmed): TRUSTED — bypass poisoning scan
+  - SYNTHETIC (summary/analysis): quarantine threshold 0.2 — maximum strictness
+
+### recursive_ai_governance
+**Finding:** Cap-05 governs AI systems using AI agents — the recursive governance
+problem. The audit trail must capture "who governed the governor."
+
+Every expert review decision must record:
+  - `reviewed_by: str` (human expert ID, never an agent ID)
+  - `review_method: str` (read full text / AI-assisted / delegated)
+  - `ai_assistance_used: bool` (if AI assisted the human's review, log which model)
+  - `confidence: float` (human expert's stated confidence in the decision)
+
+This creates a defensible record if the compliance system itself is audited.
+
+### updated_eval_scorecard
+New metrics added to the existing scorecard:
+
+```yaml
+lab_alignment_score:
+  description: Completion rate on LAB-style long-horizon regulatory tasks
+  threshold: >= 0.70
+  weight: 0.10
+
+temporal_obligation_accuracy:
+  description: Fraction of obligations with correct valid_from/valid_until
+  threshold: >= 0.95
+  weight: 0.08
+
+multi_judge_consensus_rate:
+  description: Rate at which 3-judge panel reaches unanimous agreement
+  threshold: >= 0.85
+  weight: 0.05
+  note: Low consensus → flag for human review, not automatic block
+
+gdpr_ai_act_dual_coverage:
+  description: Fraction of AI Act obligations cross-referenced with relevant GDPR articles
+  threshold: >= 0.80
+  weight: 0.05
+```
+
+### new_tasks_added
+```
+TASK-05-05: SSGM governance wiring with quarantine_threshold=0.3 + decay calibration
+TASK-05-06: Multi-judge panel (3-judge, different model families, majority vote)
+TASK-05-07: Temporal knowledge graph (obligation version graph, amendment tracking)
+TASK-05-08: GraphRAG hybrid (pgvector + Neo4j/FalkorDB for multi-hop compliance)
+TASK-05-09: GDPR × AI Act dual-framework obligation mapping
+TASK-05-10: LAB-style long-horizon eval harness
+TASK-05-11: Recursive AI governance audit trail (who-governed-the-governor)
+TASK-05-12: EU AI Act GPAI Code of Practice conformity checker
+```

@@ -387,3 +387,78 @@ When implementing this spec:
 9. All agent hops logged to OTEL with session_id, agent_type, intent_class, tokens, latency.
 10. Marty (supplier agent) has a hard dollar threshold above which it cannot act autonomously — human approval required. This value is configured in settings.py, not hardcoded.
 ```
+
+---
+
+## frontier_improvements
+# Added: 2026-06-17 — based on Frontier Agentic AI Engineering Patterns research
+
+### protocol_layering
+**Finding:** The agentic commerce stack has consolidated into 4 distinct protocol layers.
+Cap-03 should implement all four to be genuinely interoperable.
+**Source:** ADR-003-protocol-layering.md
+
+```
+Layer 1 — Discovery:    MCP 2025-11-25 (→ 2026-07-28 when final)
+                        Product catalog, inventory, policy tools
+                        All MCP servers implement stateless handlers (SEP-2567 prep)
+
+Layer 2 — Coordination: A2A v1.0 (Linux Foundation, GA March 2026)
+                        Sparky publishes signed Agent Card
+                        Marty ↔ third-party supplier agents via A2A
+                        Signed tasks with version negotiation
+
+Layer 3 — Checkout:     ACP (OpenAI + Stripe, Apache 2.0) OR
+                        UCP (Universal Commerce Protocol, Google + Shopify, Apache 2.0)
+                        Configurable per deployment via settings.COMMERCE_PROTOCOL
+
+Layer 4 — Payment:      AP2 (Google, W3C Verifiable Credentials)
+                        Cryptographically signed payment mandates
+                        NEVER auto-generate above AUTONOMOUS_ACTION_THRESHOLD_USD
+                        Human gate required for all AP2 mandates
+```
+
+**Naming correction:** "UCP" = Universal **Commerce** Protocol (not "Context").
+MCP remains the tool/context protocol. These are complementary, not competing.
+
+### stateless_mcp_migration
+All Cap-03 MCP servers (catalog, OMS, CRM, promotions, inventory, supplier-portal)
+must implement stateless request handlers NOW (2025-11-25 compliant):
+  - No server-side session state
+  - Session data in explicit per-request handles
+  - Mark with `# MCP-MIGRATE: session-to-handle` for 2026-07-28 upgrade
+
+### webmcp_evaluation
+WebMCP (W3C, Chrome preview, Feb 2026): browser-native `navigator.modelContext`
+exposes in-page tools. Evaluated for agent-facing commerce surfaces.
+Status: optional prototype — not required for MVP. Add as TASK-03-07 stretch goal.
+
+### shopify_renaissance_patterns
+Shopify "Renaissance" (Winter '26) introduces patterns directly applicable to Cap-03:
+  - **Agentic Storefronts:** products surfaced inside ChatGPT/Perplexity/Copilot
+    via ACP/UCP — Sparky's product discovery should support this surface
+  - **SimGym:** AI shopper agents simulate traffic for A/B testing
+    → Apply to Cap-03 eval: synthetic shoppers validate recommendation quality
+  - **Sidekick Pulse:** proactive task surfacing (Heartbeat pattern from OpenClaw)
+    → Add to Marty: proactively alert on low-stock before stockout, not after
+
+### harness_sensors_for_cap03
+Computational sensors:
+  - margin_sensor: blocks margin-negative items from slot-1 (already in SPEC)
+  - stock_sensor: blocks OOS items from primary recommendation (already in SPEC)
+  - frustration_sensor: triggers immediate escalation (already in SPEC)
+  - order_confirmation_sensor: no OMS write without explicit confirmation
+
+New sensors following ADR-002:
+  - agent_sprawl_sensor: counts distinct customer-facing entry points → BLOCKING if > 2
+  - commerce_protocol_sensor: validates ACP/UCP/AP2 message structure before send
+  - csat_tier_sensor: routes CSAT measurement to correct complexity tier bucket
+
+### new_tasks_added
+```
+TASK-03-05: A2A Agent Cards for Sparky + Marty (signed, versioned, published)
+TASK-03-06: Layered commerce protocol (ACP OR UCP checkout + AP2 mandates)
+TASK-03-07: SimGym synthetic shopper eval harness
+TASK-03-08: Heartbeat proactive alerting for Marty (Shopify Pulse pattern)
+TASK-03-09: Stateless MCP server migration annotations (MCP-MIGRATE comments)
+```

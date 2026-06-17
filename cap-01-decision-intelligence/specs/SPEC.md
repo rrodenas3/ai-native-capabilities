@@ -412,3 +412,71 @@ When implementing this spec:
 9. Follow the state schema exactly — do not add fields without updating this spec.
 10. When uncertain, open a Consultation Request (comment in code: # CRP: <question>) rather than guessing.
 ```
+
+---
+
+## frontier_improvements
+# Added: 2026-06-17 — based on Frontier Agentic AI Engineering Patterns research
+
+### adaptive_rag_router
+**Finding:** 2026 consensus is Adaptive RAG — a complexity classifier routes each
+query to the appropriate retrieval strategy rather than using one strategy for all.
+**Source:** arXiv 2604.09666 "Do We Still Need GraphRAG?" + RAGAS 2026 RAG report
+
+```
+Query complexity classifier:
+  SIMPLE     → naive RAG (single pgvector search)
+  MODERATE   → advanced RAG (hybrid BM25+semantic + cross-encoder rerank + HyDE)
+  RELATIONAL → graph RAG (pgvector + property graph, multi-hop)
+  HARD       → agentic RAG (agent decomposes, multi-round retrieval)
+  MIXED      → adaptive (classifier routes sub-questions independently)
+```
+
+Priority upgrade order (ROI-highest-first):
+1. Hybrid search + reciprocal rank fusion (BM25 + dense — already in SPEC)
+2. Cross-encoder reranking (Cohere Rerank 3 / Voyage / bge-reranker)
+3. Query transformation (HyDE, multi-query, decomposition)
+4. Adaptive router (complexity classifier)
+5. Graph RAG (only for relationship-heavy queries — benchmark first)
+
+### temporal_rag
+**Finding:** A key failure mode is "semantically relevant but no longer valid"
+retrieval — documents that are topically matching but outdated (e.g., a superseded
+policy, a retracted analysis). SSGM temporal decay addresses this in memory.
+For retrieval: add recency weighting and temporal consistency sensor.
+
+New eval metric:
+  temporal_consistency_rate: fraction of retrieved docs that are still current
+  target: >= 0.95
+
+### harness_sensors_for_cap01
+Following ADR-002 harness engineering:
+
+Computational sensors (every step, cheap):
+  - citation_presence_sensor: every Finding must have >= 1 Citation
+  - access_tier_sensor: no restricted doc returned to unauthorised caller
+  - budget_sensor: halt if cost > 80% of SESSION_BUDGET_USD
+
+Inferential sensors (at quality gates, expensive):
+  - hallucination_sensor: LLM-as-judge on final brief (use different model family)
+  - cross_turn_state_sensor: detects the "1-in-5 P0" cross-turn state errors
+
+Judge model constraint (ADR-002): if agent uses claude-sonnet/opus, judge must
+use gpt-5 or gpt-5-mini (or vice versa). Never same model family as agent.
+
+### a_mem_self_linking_notes
+**Finding:** A-MEM (arXiv 2502.12110) — Zettelkasten self-linking notes outperform
+flat pgvector retrieval on 6 foundation models.
+
+On episodic memory store(): auto-link new brief to top-3 similar past briefs.
+On retrieve(): follow links 1 hop to surface related context automatically.
+Track contradiction links when new brief conflicts with a past one.
+
+### new_tasks_added
+```
+TASK-01-11: Adaptive RAG router (complexity classifier → naive/advanced/graph/agentic)
+TASK-01-12: Cross-encoder reranking + query transformation (HyDE, multi-query)
+TASK-01-13: Temporal RAG (recency weighting, temporal-consistency eval metric)
+TASK-01-14: A-MEM self-linking notes for episodic brief store
+TASK-01-15: Harness sensors (computational + inferential) wired into agent graph
+```
