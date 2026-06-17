@@ -32,7 +32,7 @@ def check(name: str, fn) -> tuple[str, str, str]:
 
 def check_postgres() -> str:
     import psycopg
-    url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost/ai_native")
+    url = os.getenv("DATABASE_URL", "postgresql://localhost/ai_native")
     with psycopg.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT version()")
