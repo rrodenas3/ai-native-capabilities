@@ -9,7 +9,8 @@ from core.utils.settings import get_settings
 
 MODULE_PATH = Path(__file__).parents[1] / "agents" / "analysis_agent.py"
 SPEC = importlib.util.spec_from_file_location("cap01_analysis_agent", MODULE_PATH)
-assert SPEC and SPEC.loader
+if SPEC is None or SPEC.loader is None:
+    raise RuntimeError(f"Unable to load analysis agent module from {MODULE_PATH}")
 module = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = module
 SPEC.loader.exec_module(module)
@@ -75,6 +76,18 @@ def test_analysis_agent_detects_contradictions(monkeypatch) -> None:
     assert output["contradictions"]
 
 
+def test_analysis_agent_ignores_single_document_with_opposing_terms(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_MODE", "mock")
+    get_settings.cache_clear()
+    state = base_state(
+        retrieval_results=[result("doc-a", "Supply risk may increase in Q1 and decrease in Q2.")]
+    )
+
+    output = analysis_agent_node(state)
+
+    assert output["contradictions"] == []
+
+
 def test_analysis_agent_detects_gaps(monkeypatch) -> None:
     monkeypatch.setenv("LLM_MODE", "mock")
     get_settings.cache_clear()
@@ -83,6 +96,16 @@ def test_analysis_agent_detects_gaps(monkeypatch) -> None:
     output = analysis_agent_node(state)
 
     assert output["uncertainty_flags"] == ["No retrieved evidence covers: regulatory exposure"]
+
+
+def test_analysis_agent_gap_detection_includes_short_business_terms(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_MODE", "mock")
+    get_settings.cache_clear()
+    state = base_state(sub_queries=["risk cost ROI NPV"], retrieval_results=[result("doc-a", "unrelated evidence")])
+
+    output = analysis_agent_node(state)
+
+    assert output["uncertainty_flags"] == ["No retrieved evidence covers: risk cost ROI NPV"]
 
 
 def test_analysis_agent_uses_powerful_model_and_logs(monkeypatch) -> None:
