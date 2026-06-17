@@ -22,8 +22,8 @@ def load_attr(module_name: str, relative_path: str, attr: str) -> Any:
         raise RuntimeError(f"Unable to load {attr} from {module_path}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
-    loader = spec.loader
-    loader.exec_module(module)
+    exec_module = spec.loader.exec_module
+    exec_module(module)
     if not hasattr(module, attr):
         raise AttributeError(f"Module {module_name} does not have attribute {attr}")
     return getattr(module, attr)
