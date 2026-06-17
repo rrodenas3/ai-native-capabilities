@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
+import re
 from typing import Any, Literal
 
 from core.memory import Document, SemanticMemory
@@ -83,7 +84,7 @@ class DocumentIngestor:
                 access_tier=access_tier,
                 source=str(file_path),
             )
-            doc_id = file_path.stem
+            doc_id = _path_doc_id(file_path, root)
             doc_ids.append(doc_id)
             documents.append(
                 Document(
@@ -100,14 +101,17 @@ class DocumentIngestor:
 
     def _read_file(self, path: Path) -> str:
         suffix = path.suffix.lower()
-        if suffix in {".txt", ".md"}:
-            return path.read_text(encoding="utf-8")
-        if suffix in {".html", ".htm"}:
-            return _html_to_text(path.read_text(encoding="utf-8"))
-        if suffix == ".pdf":
-            return _read_pdf(path)
-        if suffix == ".docx":
-            return _read_docx(path)
+        try:
+            if suffix in {".txt", ".md"}:
+                return path.read_text(encoding="utf-8")
+            if suffix in {".html", ".htm"}:
+                return _html_to_text(path.read_text(encoding="utf-8"))
+            if suffix == ".pdf":
+                return _read_pdf(path)
+            if suffix == ".docx":
+                return _read_docx(path)
+        except (OSError, UnicodeError, RuntimeError) as exc:
+            raise RuntimeError(f"Failed to read document: {path}") from exc
         raise ValueError(f"Unsupported document format: {path.suffix}")
 
     @staticmethod
@@ -136,7 +140,10 @@ def _html_to_text(html: str) -> str:
 
 
 def _read_pdf(path: Path) -> str:
-    from pypdf import PdfReader
+    try:
+        from pypdf import PdfReader
+    except ImportError as exc:
+        raise RuntimeError("pypdf is required to ingest PDF files") from exc
 
     reader = PdfReader(str(path))
     return "\n".join(page.extract_text() or "" for page in reader.pages)
@@ -150,4 +157,10 @@ def _read_docx(path: Path) -> str:
 
     document = DocxDocument(str(path))
     return "\n".join(paragraph.text for paragraph in document.paragraphs if paragraph.text)
+
+
+def _path_doc_id(path: Path, root: Path) -> str:
+    relative = path.relative_to(root)
+    stemmed = relative.with_suffix("").as_posix().lower()
+    return re.sub(r"[^a-z0-9._/-]+", "-", stemmed).replace("/", "__")
 
