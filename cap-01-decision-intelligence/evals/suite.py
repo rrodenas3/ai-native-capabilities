@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -119,7 +120,7 @@ def response_latency_p95_s(cases: list[dict]) -> float:
     values = sorted(float(case.get("latency_s", 0.0)) for case in cases)
     if not values:
         return 0.0
-    index = max(round(0.95 * len(values)) - 1, 0)
+    index = max(math.ceil(0.95 * len(values)) - 1, 0)
     return round(values[index], 4)
 
 

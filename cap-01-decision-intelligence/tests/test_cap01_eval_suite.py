@@ -17,6 +17,7 @@ sys.modules[SPEC.name] = module
 SPEC.loader.exec_module(module)
 
 run_eval = module.run_eval
+response_latency_p95_s = module.response_latency_p95_s
 FIXTURE_PATH = module.FIXTURE_PATH
 
 
@@ -47,6 +48,12 @@ def test_cap01_eval_fixture_has_minimum_20_cases() -> None:
 
     assert len(cases) >= 20
     assert all(case["brief"]["key_findings"][0]["citations"] for case in cases)
+
+
+def test_response_latency_p95_uses_nearest_rank() -> None:
+    cases = [{"latency_s": value} for value in range(1, 21)]
+
+    assert response_latency_p95_s(cases) == 19
 
 
 def test_cap01_eval_cli_writes_valid_report_and_gate_check_passes(monkeypatch, tmp_path) -> None:
