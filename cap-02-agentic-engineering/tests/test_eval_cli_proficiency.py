@@ -40,6 +40,7 @@ def test_cap02_eval_suite_reports_all_8_metrics() -> None:
     }
     assert report["metrics"]["briefing_completeness"] == 1.0
     assert report["metrics"]["security_weakness_rate"] <= 5.0
+    assert eval_suite._criteria_pass_rate(0, 0) == 0.0
 
 
 def test_proficiency_assigns_levels_and_templates() -> None:
@@ -84,6 +85,33 @@ def test_ace_run_and_review_commands(tmp_path) -> None:
     )
     assert review_completed.returncode == 0, review_completed.stderr
     assert "Decision: APPROVE" in review_completed.stdout
+
+
+def test_ace_handles_invalid_json_files(tmp_path) -> None:
+    bad_mrp = tmp_path / "bad-mrp.json"
+    bad_queue = tmp_path / "bad-crps.json"
+    bad_mrp.write_text("{bad", encoding="utf-8")
+    bad_queue.write_text("{bad", encoding="utf-8")
+
+    review_completed = subprocess.run(
+        [sys.executable, str(ROOT / "cli" / "ace.py"), "review", str(bad_mrp)],
+        cwd=REPO,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert review_completed.returncode == 1
+    assert "Invalid JSON" in review_completed.stdout
+
+    list_completed = subprocess.run(
+        [sys.executable, str(ROOT / "cli" / "ace.py"), "crp", "list", "--queue", str(bad_queue)],
+        cwd=REPO,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert list_completed.returncode != 0
+    assert "invalid JSON" in list_completed.stderr
 
 
 def test_proficiency_cli_non_interactive() -> None:

@@ -37,7 +37,9 @@ def run_eval() -> dict[str, Any]:
     state = mentor.mentor_review_node(state)
     state = security.security_gate_node({**state, "security_scan_root": scan_root})
     state = mrp.mrp_agent_node(state)
-    pack = state["merge_readiness_pack"]
+    pack = state.get("merge_readiness_pack")
+    if pack is None:
+        raise RuntimeError("State missing required key: merge_readiness_pack")
 
     generated_lines = _generated_lines(state.get("output_files", {}))
     findings = pack.security_scan.critical + pack.security_scan.high + pack.security_scan.medium + pack.security_scan.low
@@ -47,7 +49,7 @@ def run_eval() -> dict[str, Any]:
     metrics = {
         "briefing_completeness": validation.briefing_completeness,
         "security_weakness_rate": weakness_rate,
-        "acceptance_criteria_pass": round(pass_count / len(pack.criteria_scores), 4),
+        "acceptance_criteria_pass": _criteria_pass_rate(pass_count, len(pack.criteria_scores)),
         "test_coverage": round(float(pack.coverage_pct), 4),
         "crp_resolution_rate": 1.0,
         "merge_readiness_accuracy": 1.0 if pack.ready else 0.0,
@@ -81,6 +83,10 @@ def _weighted_score(metrics: dict[str, float]) -> float:
 
 def _generated_lines(output_files: dict[str, str]) -> int:
     return sum(len(content.splitlines()) for content in output_files.values())
+
+
+def _criteria_pass_rate(pass_count: int, criteria_count: int) -> float:
+    return round(pass_count / criteria_count, 4) if criteria_count else 0.0
 
 
 def _load(relative: str, name: str) -> Any:

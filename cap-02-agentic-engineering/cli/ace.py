@@ -61,7 +61,11 @@ def run(spec: Path) -> None:
 def review(mrp: Path, decision: str = typer.Option("approve", "--decision")) -> None:
     """Review a Merge-Readiness Pack and approve or reject it."""
 
-    pack = json.loads(mrp.read_text(encoding="utf-8"))
+    try:
+        pack = json.loads(mrp.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        console.print(f"[red]Invalid JSON in MRP file: {exc}[/red]")
+        raise typer.Exit(1) from exc
     _print_mrp(pack)
     if decision.lower() not in {"approve", "reject", "changes"}:
         raise typer.BadParameter("decision must be approve, reject, or changes")
@@ -143,7 +147,10 @@ def _briefing_data(goal: str, why: str, business_value: str, scope: str, criteri
 def _read_json_list(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         return []
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise typer.BadParameter(f"CRP queue file contains invalid JSON: {path}") from exc
     if not isinstance(payload, list):
         raise typer.BadParameter("CRP queue must contain a JSON list")
     return payload

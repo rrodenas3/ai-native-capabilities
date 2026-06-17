@@ -26,7 +26,9 @@ def run_demo() -> dict:
     state = mentor.mentor_review_node(state)
     state = security.security_gate_node(state)
     state = mrp.mrp_agent_node(state)
-    pack = state["merge_readiness_pack"]
+    pack = state.get("merge_readiness_pack")
+    if pack is None:
+        raise RuntimeError("State missing required key: merge_readiness_pack")
     return pack.model_dump(mode="json")
 
 
