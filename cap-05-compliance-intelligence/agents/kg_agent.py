@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 from cap05_loader import load_attr  # noqa: E402
 
 KnowledgeGraph = load_attr("cap05_kg", "tools/knowledge_graph.py", "KnowledgeGraph")
+GovernedKnowledgeGraph = load_attr("cap05_governed_kg", "tools/governed_kg.py", "GovernedKnowledgeGraph")
 
 
 def upsert_obligations(graph: Any, regulation: dict[str, Any], articles: list[dict[str, Any]], obligations: list[dict[str, Any]]) -> Any:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -36,7 +37,18 @@ class SecurityScanResult(BaseModel):
         return float(self.critical + self.high + self.medium + self.low)
 
 
+def _require_ci_scanners() -> None:
+    if os.environ.get("REQUIRE_SECURITY_SCANNERS") != "1":
+        return
+    missing = [tool for tool in ("bandit", "semgrep") if shutil.which(tool) is None]
+    if missing:
+        raise RuntimeError(
+            f"Security scanners required (REQUIRE_SECURITY_SCANNERS=1): {', '.join(missing)}"
+        )
+
+
 def scan_files(paths: list[str | Path], *, timeout_s: int = 30) -> SecurityScanResult:
+    _require_ci_scanners()
     files = [Path(path) for path in paths]
     findings = _heuristic_findings(files)
     findings.extend(_bandit_findings(files, timeout_s=timeout_s))

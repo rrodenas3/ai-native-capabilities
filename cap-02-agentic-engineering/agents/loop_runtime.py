@@ -6,12 +6,14 @@ from typing import Any
 from uuid import uuid4
 
 from core.harness.loop import ConsultationRequestPack, LoopState, LoopStopCondition
+from core.harness.sensors import SensorRegistry, default_registry
 
 
 class LoopRuntime:
-    def __init__(self, max_iterations: int = 20) -> None:
+    def __init__(self, max_iterations: int = 20, *, sensors: SensorRegistry | None = None) -> None:
         self.state = LoopState(max_iterations=max_iterations)
         self.progress_by_criterion: dict[str, bool] = {}
+        self.sensors = sensors or default_registry()
 
     def record_step(
         self,

@@ -4,8 +4,8 @@ Check eval gates - enforces blocking metrics from capability specs.
 Called by GitHub Actions CI after each capability eval run.
 
 Usage:
-    python scripts/check_eval_gates.py reports/cap01.json --capability cap-01
-    python scripts/check_eval_gates.py reports/cap04.json --capability cap-04
+    python scripts/check_eval_gates.py reports/cap-01.json --capability cap-01
+    python scripts/check_eval_gates.py reports/cap-04.json --capability cap-04
 """
 
 import argparse
@@ -21,71 +21,13 @@ try:
 except ImportError:
     HAS_RICH = False
 
-# Blocking metrics per capability - derived from each capability's SPEC.md
-# These mirror the eval_scorecard blocking fields in the specs exactly.
-BLOCKING_METRICS: dict[str, list[tuple[str, float, bool]]] = {
-    # (metric_name, threshold, lower_is_better)
-    "cap-01": [
-        ("citation_accuracy",   0.95, False),
-        ("hallucination_rate",  0.02, True),
-    ],
-    "cap-02": [
-        ("briefing_completeness",    1.00, False),
-        ("security_weakness_rate",   5.0,  True),
-    ],
-    "cap-03": [
-        ("agent_sprawl_count",    2.0, True),
-        ("escalation_accuracy",   0.90, False),
-    ],
-    "cap-04": [
-        ("human_approval_coverage",  1.00, False),
-        ("digital_twin_validation",  1.00, False),
-    ],
-    "cap-05": [
-        ("false_negative_rate_obligations", 0.01, True),
-        ("citation_accuracy",               0.98, False),
-        ("expert_review_coverage",          1.00, False),
-        ("query_answer_citation_rate",      1.00, False),
-    ],
-}
-
-# Non-blocking warning thresholds
-WARNING_THRESHOLDS: dict[str, list[tuple[str, float, bool]]] = {
-    "cap-01": [
-        ("retrieval_recall",        0.85, False),
-        ("human_override_rate",     0.15, True),
-        ("response_latency_p95_s",  30.0, True),
-        ("cost_per_brief_usd",      0.50, True),
-    ],
-    "cap-02": [
-        ("acceptance_criteria_pass",  0.90, False),
-        ("test_coverage",             0.80, False),
-        ("cost_per_task_usd",         2.00, True),
-    ],
-    "cap-03": [
-        ("intent_classification_accuracy",  0.92, False),
-        ("basket_margin_awareness",         0.95, False),
-        ("response_latency_p95_ms",       1500.0, True),
-    ],
-    "cap-04": [
-        ("forecast_accuracy_mape",       0.15, True),
-        ("stockout_reduction_rate",      0.30, False),
-        ("autonomous_action_accuracy",   0.95, False),
-        ("exception_detection_recall",   0.90, False),
-    ],
-    "cap-05": [
-        ("false_positive_rate_obligations", 0.10, True),
-        ("gap_detection_accuracy",          0.90, False),
-        ("knowledge_graph_accuracy",        0.92, False),
-    ],
-}
-
-
-def check_metric(value: float, threshold: float, lower_is_better: bool) -> bool:
-    """Return True if the metric passes its gate."""
-    if lower_is_better:
-        return value <= threshold
-    return value >= threshold
+from core.evals.gate_config import (
+    BLOCKING_METRICS,
+    WARNING_THRESHOLDS,
+    check_metric,
+    evaluate_report,
+    is_enforced_cap,
+)
 
 
 def fmt(v: float) -> str:
@@ -105,46 +47,35 @@ def main() -> None:
 
     if not report_path.exists():
         print(f"ERROR: report not found at {report_path}")
+        if is_enforced_cap(cap_id):
+            print(f"[{cap_id}] Enforced capability — missing eval report blocks merge")
+            sys.exit(1)
         print("This usually means the eval suite has not been implemented yet.")
         print("Create cap-XX/evals/suite.py to fix this.")
-        sys.exit(0)  # Don't fail CI for missing eval suite (not yet built)
+        sys.exit(0)
 
     with open(report_path) as f:
         report = json.load(f)
 
-    status = report.get("status", "unknown")
+    evaluation = evaluate_report(report, cap_id)
     metrics = report.get("metrics", {})
 
-    if status in ("no_eval_suite", "not_found", "error"):
-        note = report.get("note", report.get("stderr", ""))
-        print(f"[{cap_id}] Eval suite status: {status}")
+    if evaluation.fatal_status:
+        note = evaluation.fatal_note or ""
+        print(f"[{cap_id}] Eval suite status: {evaluation.fatal_status}")
         if note:
             print(f"  Note: {note}")
+        if is_enforced_cap(cap_id):
+            print("  BLOCKING — enforced capability requires a passing eval suite")
+            sys.exit(1)
         print("  Skipping gate check - eval suite not yet implemented")
         sys.exit(0)
 
     blocking = BLOCKING_METRICS.get(cap_id, [])
     warnings = WARNING_THRESHOLDS.get(cap_id, [])
+    failures = evaluation.failures
+    warns = evaluation.warnings
 
-    failures: list[tuple[str, float, float, bool]] = []
-    warns: list[tuple[str, float, float, bool]] = []
-
-    for metric_name, threshold, lower_is_better in blocking:
-        if metric_name not in metrics:
-            failures.append((metric_name, -1.0, threshold, lower_is_better))
-            continue
-        value = metrics[metric_name]
-        if not check_metric(value, threshold, lower_is_better):
-            failures.append((metric_name, value, threshold, lower_is_better))
-
-    for metric_name, threshold, lower_is_better in warnings:
-        if metric_name not in metrics:
-            continue
-        value = metrics[metric_name]
-        if not check_metric(value, threshold, lower_is_better):
-            warns.append((metric_name, value, threshold, lower_is_better))
-
-    # Print results
     if HAS_RICH:
         table = Table(show_header=True, header_style="bold", box=None, padding=(0, 2))
         table.add_column("Metric", width=38)

@@ -9,10 +9,13 @@ Usage:
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
 from pathlib import Path
+
+from core.evals.gate_config import evaluate_report
 
 try:
     from rich.console import Console
@@ -47,16 +50,21 @@ def run_cap_evals(cap_id: str, mock: bool = True) -> dict:
     report_path.parent.mkdir(exist_ok=True)
 
     if not eval_script.exists():
-        return {
+        report = {
             "cap": cap_id,
             "status": "no_eval_suite",
             "score": 0.0,
-            "blocking_failures": [],
             "note": f"eval suite not yet implemented at {eval_script}",
         }
+        gate = evaluate_report(report, cap_id)
+        report["blocking_failures"] = gate.failure_names
+        return report
 
-    env = {"EVAL_MODE": "ci", "LLM_MODE": "mock" if mock else "real"}
-    import os
+    env = {
+        "EVAL_MODE": "ci",
+        "LLM_MODE": "mock" if mock else "real",
+        "REQUIRE_SECURITY_SCANNERS": "1",
+    }
     full_env = {**os.environ, **env}
 
     start = time.time()
@@ -73,16 +81,20 @@ def run_cap_evals(cap_id: str, mock: bool = True) -> dict:
         with open(report_path) as f:
             report = json.load(f)
         report["elapsed_s"] = round(elapsed, 1)
+        gate = evaluate_report(report, cap_id)
+        report["blocking_failures"] = gate.failure_names
         return report
 
-    return {
+    report = {
         "cap": cap_id,
         "status": "error",
         "score": 0.0,
-        "blocking_failures": [],
         "stderr": result.stderr[:200],
         "elapsed_s": round(elapsed, 1),
     }
+    gate = evaluate_report(report, cap_id)
+    report["blocking_failures"] = gate.failure_names
+    return report
 
 
 def print_summary(results: list[dict]) -> None:
@@ -141,9 +153,9 @@ def print_summary(results: list[dict]) -> None:
     console.print(table)
 
     if all_pass:
-        console.print("[green bold]✓ All eval gates passed — ready to merge[/green bold]\n")
+        console.print("[green bold]PASS: All eval gates passed -- ready to merge[/green bold]\n")
     else:
-        console.print("[red bold]✗ Eval gates failed — fix before merging[/red bold]\n")
+        console.print("[red bold]FAIL: Eval gates failed -- fix before merging[/red bold]\n")
         sys.exit(1)
 
 

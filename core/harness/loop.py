@@ -95,6 +95,18 @@ class ComputationalSensor:
         raise NotImplementedError
 
 
+class InferentialSensor:
+    """
+    Base class for LLM-as-judge sensors (run at quality gates, not every step).
+    Subclass and implement `check(state) -> SensorResult`.
+    """
+    name: str = "base_inferential_sensor"
+    blocking: bool = False
+
+    def check(self, state: dict[str, Any]) -> SensorResult:
+        raise NotImplementedError
+
+
 class SchemaSensor(ComputationalSensor):
     """Validates that a tool call matches the registered schema."""
     name = "schema_validation"

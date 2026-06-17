@@ -6,7 +6,8 @@ import hashlib
 import re
 from typing import Any
 
-MODEL_NAME = "claude-opus-4-8"
+from core.utils.settings import get_settings
+
 BINDING_TERMS = ("must", "shall", "required", "prohibited", "may not", "ensure", "provide")
 
 
@@ -46,7 +47,7 @@ def extract_obligations(document: dict[str, Any]) -> list[dict[str, Any]]:
                 "requires_expert_review": True,
                 "expert_confirmed": False,
                 "status": "PENDING",
-                "extraction_model": MODEL_NAME,
+                "extraction_model": get_settings().LLM_POWERFUL,
             }
         )
     return obligations

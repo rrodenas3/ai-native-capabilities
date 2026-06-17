@@ -1,0 +1,66 @@
+name: Evals
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run pytest
+        run: pytest
+
+      - name: Check golden principles
+        run: python scripts/check_golden_principles.py
+
+  evals:
+    name: mock eval gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run mock eval suite
+        env:
+          EVAL_MODE: ci
+          LLM_MODE: mock
+          REQUIRE_SECURITY_SCANNERS: "1"
+        run: python scripts/run_evals.py --all --mock
+
+      - name: Verify gate reports per capability
+        run: |
+          for cap in cap-01 cap-02 cap-03 cap-04 cap-05; do
+            python scripts/check_eval_gates.py "reports/${cap}.json" --capability "$cap"
+          done
+
+      - name: Upload eval reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-reports
+          path: reports/*.json
+          if-no-files-found: warn

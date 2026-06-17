@@ -53,7 +53,17 @@ def run_eval() -> dict:
         blocking_failures.append("agent_sprawl_count")
     if metrics["escalation_accuracy"] < 0.90:
         blocking_failures.append("escalation_accuracy")
-    return {"cap": "cap-03", "status": "pass" if not blocking_failures else "fail", "metrics": metrics, "blocking_failures": blocking_failures}
+
+    checks = [
+        metrics["intent_classification_accuracy"] >= 0.92,
+        metrics["escalation_accuracy"] >= 0.90,
+        metrics["basket_margin_awareness"] >= 0.95,
+        metrics["agent_sprawl_count"] <= 2,
+        metrics["product_recommendation_accuracy"] >= 0.90,
+    ]
+    score = round(sum(checks) / len(checks), 4)
+
+    return {"cap": "cap-03", "status": "pass" if not blocking_failures else "fail", "score": score, "metrics": metrics, "blocking_failures": blocking_failures}
 
 
 def main() -> None:
