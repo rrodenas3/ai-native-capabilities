@@ -1,0 +1,8 @@
+# Article 2 - Synthetic EU AI Act Article 2
+
+Effective date: 2026-08-02
+Jurisdiction: EU
+
+Providers Of High-Risk Ai Systems shall maintain a documented risk management system; non-compliance may be subject to administrative fines up to EUR 15M.
+Providers shall preserve evidence for Article 2 where necessary for competent authority review.
+This fixture is deterministic and supports compliance pipeline evaluation.
