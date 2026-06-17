@@ -12,7 +12,17 @@ from opentelemetry.sdk.trace.export import SimpleSpanProcessor, SpanExporter
 from core.schemas.base import AgentHop
 
 
-def configure_tracer_provider(exporter: SpanExporter | None = None) -> TracerProvider:
+def configure_tracer_provider(
+    exporter: SpanExporter | None = None,
+    *,
+    force: bool = False,
+) -> TracerProvider:
+    current_provider = trace.get_tracer_provider()
+    if not force and not isinstance(current_provider, trace.ProxyTracerProvider):
+        if not isinstance(current_provider, TracerProvider):
+            raise RuntimeError("An external tracer provider is already configured")
+        return current_provider
+
     provider = TracerProvider()
     if exporter is not None:
         provider.add_span_processor(SimpleSpanProcessor(exporter))
