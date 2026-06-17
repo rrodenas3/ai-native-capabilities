@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -18,11 +19,16 @@ def execution_agent_node(state: dict[str, Any]) -> dict[str, Any]:
         crp = _crp("TASK-branch", ["Checked current branch"], ["Current branch is protected"], "Create a feature branch before executing.")
         return {**state, "status": "CRP_PENDING", "crps_raised": [*state.get("crps_raised", []), crp]}
 
-    files_changed = [f"generated/{briefing.briefing_id.lower()}.py"]
-    tests_added = [f"tests/test_{briefing.briefing_id.lower().replace('-', '_')}.py"]
+    brief_slug = re.sub(r"[^a-z0-9_]+", "_", briefing.briefing_id.lower()).strip("_")
+    files_changed = [f"generated/{brief_slug}.py"]
+    tests_added = [f"tests/test_{brief_slug}.py"]
     output_files = {
         files_changed[0]: "def generated_value():\n    return 'sase-ready'\n",
-        tests_added[0]: "def test_generated_value():\n    assert generated_value() == 'sase-ready'\n",
+        tests_added[0]: (
+            f"from generated.{brief_slug} import generated_value\n\n"
+            "def test_generated_value():\n"
+            "    assert generated_value() == 'sase-ready'\n"
+        ),
     }
     loop_script = {
         "plan": [task.description for task in briefing.implementation_tasks],

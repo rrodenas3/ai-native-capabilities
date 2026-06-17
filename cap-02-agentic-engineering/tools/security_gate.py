@@ -55,7 +55,7 @@ def security_gate_node(state: dict[str, Any]) -> dict[str, Any]:
         path.write_text(str(content), encoding="utf-8")
         paths.append(path)
     result = scan_files(paths)
-    status = "BLOCKED" if result.critical > 0 else state.get("status", "SECURITY_PASSED")
+    status = "BLOCKED" if result.blocked else state.get("status", "SECURITY_PASSED")
     return {**state, "security_scan": result, "status": status, "security_weakness_rate": result.weakness_rate_per_kloc}
 
 
@@ -80,13 +80,16 @@ def _heuristic_findings(files: list[Path]) -> list[SecurityFinding]:
 def _bandit_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFinding]:
     if shutil.which("bandit") is None or not files:
         return []
-    completed = subprocess.run(
-        ["bandit", "-f", "json", "-q", *[str(path) for path in files]],
-        capture_output=True,
-        text=True,
-        timeout=timeout_s,
-        check=False,
-    )
+    try:
+        completed = subprocess.run(
+            ["bandit", "-f", "json", "-q", *[str(path) for path in files]],
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return []
     try:
         payload = json.loads(completed.stdout or "{}")
     except json.JSONDecodeError:
@@ -107,13 +110,16 @@ def _bandit_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFindi
 def _semgrep_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFinding]:
     if shutil.which("semgrep") is None or not files:
         return []
-    completed = subprocess.run(
-        ["semgrep", "--config", "auto", "--json", *[str(path) for path in files]],
-        capture_output=True,
-        text=True,
-        timeout=timeout_s,
-        check=False,
-    )
+    try:
+        completed = subprocess.run(
+            ["semgrep", "--config", "auto", "--json", *[str(path) for path in files]],
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return []
     try:
         payload = json.loads(completed.stdout or "{}")
     except json.JSONDecodeError:

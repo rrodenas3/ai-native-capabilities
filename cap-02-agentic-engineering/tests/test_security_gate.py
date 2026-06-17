@@ -6,7 +6,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 SPEC = importlib.util.spec_from_file_location("cap02_security_test", ROOT / "tools" / "security_gate.py")
-assert SPEC and SPEC.loader
+if SPEC is None or SPEC.loader is None:
+    raise ImportError("Unable to load security_gate module for testing")
 module = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = module
 SPEC.loader.exec_module(module)
