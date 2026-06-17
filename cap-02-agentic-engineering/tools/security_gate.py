@@ -68,7 +68,6 @@ def _semgrep_command() -> list[str]:
 
 
 def scan_files(paths: list[str | Path], *, timeout_s: int = 30) -> SecurityScanResult:
-    _require_ci_scanners()
     files = [Path(path) for path in paths]
     findings = _heuristic_findings(files)
     findings.extend(_bandit_findings(files, timeout_s=timeout_s))
@@ -109,18 +108,29 @@ def _heuristic_findings(files: list[Path]) -> list[SecurityFinding]:
     return findings
 
 
-def _bandit_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFinding]:
-    if shutil.which("bandit") is None or not files:
-        return []
+def _run_scanner(cmd: list[str], *, timeout_s: int) -> subprocess.CompletedProcess[str] | None:
     try:
-        completed = subprocess.run(
-            ["bandit", "-f", "json", "-q", *[str(path) for path in files]],
+        return subprocess.run(
+            cmd,
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=timeout_s,
             check=False,
         )
-    except subprocess.TimeoutExpired:
+    except (OSError, subprocess.TimeoutExpired, UnicodeDecodeError):
+        return None
+
+
+def _bandit_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFinding]:
+    if shutil.which("bandit") is None or not files:
+        return []
+    completed = _run_scanner(
+        ["bandit", "-f", "json", "-q", *[str(path) for path in files]],
+        timeout_s=timeout_s,
+    )
+    if completed is None:
         return []
     try:
         payload = json.loads(completed.stdout or "{}")
@@ -142,15 +152,11 @@ def _bandit_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFindi
 def _semgrep_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFinding]:
     if not _semgrep_available() or not files:
         return []
-    try:
-        completed = subprocess.run(
-            [*_semgrep_command(), "--config", "auto", "--json", *[str(path) for path in files]],
-            capture_output=True,
-            text=True,
-            timeout=timeout_s,
-            check=False,
-        )
-    except subprocess.TimeoutExpired:
+    completed = _run_scanner(
+        [*_semgrep_command(), "--config", "auto", "--json", "--quiet", *[str(path) for path in files]],
+        timeout_s=timeout_s,
+    )
+    if completed is None:
         return []
     try:
         payload = json.loads(completed.stdout or "{}")

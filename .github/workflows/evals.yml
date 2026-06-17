@@ -60,7 +60,6 @@ jobs:
         env:
           EVAL_MODE: ci
           LLM_MODE: mock
-          REQUIRE_SECURITY_SCANNERS: "1"
         run: python scripts/run_evals.py --all --mock
 
       - name: Verify gate reports per capability

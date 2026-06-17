@@ -104,13 +104,23 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    report = run_eval()
+    try:
+        report = run_eval()
+    except Exception as exc:
+        report = {
+            "cap": "cap-02",
+            "status": "error",
+            "score": 0.0,
+            "metrics": {},
+            "blocking_failures": ["error"],
+            "note": str(exc),
+        }
     text = json.dumps(report, indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(text, encoding="utf-8")
     print(text)
-    raise SystemExit(0 if report["status"] == "pass" else 1)
+    raise SystemExit(0 if report.get("status") == "pass" else 1)
 
 
 if __name__ == "__main__":
