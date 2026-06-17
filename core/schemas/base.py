@@ -8,18 +8,17 @@ June 2026 — verified against LangGraph 1.0.5 state management conventions.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-
 # ── Enums ──────────────────────────────────────────────────────────────────────
 
 
-class CapabilityID(str, Enum):
+class CapabilityID(StrEnum):
     DECISION_INTELLIGENCE = "cap-01"
     AGENTIC_ENGINEERING = "cap-02"
     AGENTIC_COMMERCE = "cap-03"
@@ -27,7 +26,7 @@ class CapabilityID(str, Enum):
     COMPLIANCE_INTELLIGENCE = "cap-05"
 
 
-class AgentHopType(str, Enum):
+class AgentHopType(StrEnum):
     SUPERVISOR = "supervisor"
     RETRIEVAL = "retrieval"
     ANALYSIS = "analysis"
@@ -40,7 +39,7 @@ class AgentHopType(str, Enum):
     ESCALATION = "escalation"
 
 
-class HumanGateStatus(str, Enum):
+class HumanGateStatus(StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     MODIFIED = "modified"
@@ -48,14 +47,14 @@ class HumanGateStatus(str, Enum):
     TIMED_OUT = "timed_out"
 
 
-class EvidenceGrade(str, Enum):
+class EvidenceGrade(StrEnum):
     """Evidence quality grade used in all capability docs."""
     MEASURED = "M"       # Independent, quantified, peer-reviewed or audited
     PARTIAL = "P"        # Company-reported, directionally credible, not independently verified
     VENDOR = "V"         # Treat as directional only; self-interested source
 
 
-class RiskTier(str, Enum):
+class RiskTier(StrEnum):
     """EU AI Act risk classification."""
     PROHIBITED = "prohibited"
     HIGH_RISK = "high_risk"
@@ -81,7 +80,7 @@ class AgentHop(BaseModel):
     confidence: float | None = None     # 0.0–1.0; None if not applicable
     success: bool = True
     error: str | None = None
-    started_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    started_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class AuditEvent(BaseModel):
@@ -98,7 +97,7 @@ class AuditEvent(BaseModel):
     decision: str | None = None         # human decision text
     approved_by: str | None = None
     cost_usd: float | None = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class MemoryEvent(BaseModel):
@@ -112,7 +111,7 @@ class MemoryEvent(BaseModel):
     content: str                        # text content for embedding
     embedding: list[float] | None = None  # 1536-dim for text-embedding-3-large
     metadata: dict[str, Any] = Field(default_factory=dict)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class DocumentChunk(BaseModel):
@@ -126,7 +125,7 @@ class DocumentChunk(BaseModel):
     embedding: list[float] | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
     access_tier: Literal["public", "internal", "restricted"] = "internal"
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class RetrievalResult(BaseModel):
@@ -242,7 +241,7 @@ class EvalReport(BaseModel):
     note: str | None = None
     stderr: str | None = None
     run_id: str | None = None
-    generated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 # ── MCP connector schemas ───────────────────────────────────────────────────────
@@ -279,7 +278,7 @@ class GateResult(BaseModel):
     passed: bool
     criteria_results: dict[str, bool]
     notes: str | None = None
-    checked_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    checked_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class GovernanceDecision(BaseModel):
@@ -293,4 +292,4 @@ class GovernanceDecision(BaseModel):
     decision: HumanGateStatus
     rationale: str | None = None
     value_usd: float | None = None      # monetary value of the action being approved
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
