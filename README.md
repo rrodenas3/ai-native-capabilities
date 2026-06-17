@@ -44,15 +44,53 @@ This project closes that gap — one capability at a time — and documents ever
 
 ## Stack
 
+> Verified against production releases as of June 2026. Every version pinned and justified.
+
 ```
-Language:        Python 3.12+ · TypeScript (MCP servers)
-Orchestration:   LangGraph 1.x (stateful, durable, human-in-loop)
-Protocol:        MCP (Model Context Protocol) — all tool integrations
-Models:          Claude 3.x · OpenAI GPT-4o (swappable via interface)
-Memory:          pgvector (< 50M vectors) · episodic + semantic + procedural
-Evals:           LangSmith · custom scorecard (per capability)
-Observability:   OpenTelemetry · cost telemetry (token × multiplier)
-CI:              GitHub Actions — evals on every PR
+Language         Python 3.13 (GIL-optional free-threaded mode; ~11% faster vs 3.12)
+                 TypeScript for MCP servers (official SDK: @modelcontextprotocol/sdk)
+
+Orchestration    LangGraph 1.0.5 — GA October 2025, stable API, no breaking changes
+                 until 2.0. Used by Uber, LinkedIn, Klarna, JP Morgan in production.
+                 Powers: stateful graphs · checkpointing · human-in-the-loop interrupt()
+                 · cross-thread memory · deferred node execution · streaming
+
+Protocol         MCP spec 2025-11-25 (current stable) · Streamable HTTP transport
+                 (SSE deprecated March 2025) · OAuth 2.1 + PKCE auth · 97M monthly
+                 SDK downloads · donated to Linux Foundation Agentic AI Foundation.
+                 Next spec RC: 2026-07-28 (stateless core + Tasks extension)
+
+Models           PRIMARY — Anthropic Claude (current API strings, June 2026):
+                   claude-opus-4-8        flagship, complex reasoning & long-horizon agents
+                   claude-sonnet-4-6      balanced, 79.6% SWE-bench at 40% lower cost
+                   claude-haiku-4-5-20251001  routing, classification, high-volume subagents
+                 NOTE: Claude 3.x fully retired April 2026. GPT-4o retired Feb 2026.
+
+                 SECONDARY — OpenAI (swappable via provider interface):
+                   gpt-5.5               current frontier (API available April 24 2026)
+                   gpt-5                 strong agentic & coding baseline
+                 NOTE: model strings are configured in settings.py, never hardcoded.
+
+Memory           pgvector 0.7.x (HNSW + IVFFlat; production-grade under ~50M vectors)
+                 + pgvectorscale for higher throughput on same Postgres instance
+                 Architecture: episodic (PostgreSQL events) · semantic (pgvector chunks)
+                   · procedural (Redis patterns) · long-term cross-thread (LangGraph store)
+                 Qdrant 1.9.x — evaluated as overflow option at 50M+ vectors
+
+Evals            LangSmith (deepest LangGraph integration; LangGraph Studio for replay)
+                 + Arize Phoenix OSS (framework-agnostic RAG evals; OTEL-native)
+                 + custom per-capability scorecard (YAML gates, CI-enforced)
+                 + Braintrust for structured A/B eval runs (free tier: 1M spans/month)
+
+Observability    OpenTelemetry (OTLP export) · cost telemetry (tokens × agentic
+                 multiplier, 5–30x vs single-turn) · LangSmith traces · FinOps alerts
+                 at 80% of session/run/monthly budget thresholds
+
+Security         bandit 1.8+ · semgrep 1.90+ (mandatory on all agent-generated code)
+                 MCP OAuth 2.1 with PKCE · least-privilege tool permissions · audit trail
+
+CI               GitHub Actions · eval suite on every PR · blocking metrics enforced
+                 · eval summary posted as PR comment · cost delta reported per run
 ```
 
 ---

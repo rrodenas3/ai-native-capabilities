@@ -167,14 +167,22 @@ class CostTelemetry:
     def get_run_cost(self, run_id: str) -> float: ...
     def alert_budget_exceeded(self, run_id: str, threshold_usd: float) -> None: ...
 
-# Model pricing config (update as prices change)
+# Model pricing config — verified June 2026 (per 1M tokens, USD)
+# CRITICAL: Claude 3.x retired April 2026. GPT-4o retired Feb 2026. Never use those strings.
 MODEL_PRICING = {
-    "claude-sonnet-4-6":   {"input": 3.00,  "output": 15.00},   # per 1M tokens
-    "claude-opus-4-6":     {"input": 15.00, "output": 75.00},
-    "gpt-4o":              {"input": 2.50,  "output": 10.00},
+    # Anthropic — current (June 2026)
+    "claude-opus-4-8":              {"input": 15.00, "output": 75.00},  # flagship
+    "claude-sonnet-4-6":            {"input": 3.00,  "output": 15.00},  # default
+    "claude-haiku-4-5-20251001":    {"input": 0.80,  "output": 4.00},   # subagents
+    # OpenAI — current (June 2026)
+    "gpt-5.5":                      {"input": 10.00, "output": 30.00},  # frontier
+    "gpt-5":                        {"input": 5.00,  "output": 20.00},  # strong baseline
+    "gpt-5-mini":                   {"input": 0.40,  "output": 1.60},   # cost-efficient
 }
-# Agentic multiplier warning: multi-agent tasks use 5-30x more tokens than single-turn
-# Alert when run_cost > session_budget * 0.8
+# Agentic multiplier: multi-agent tasks use 5–30x more tokens than single-turn chat.
+# Real case: Uber exhausted its full-year 2026 AI budget by April after Claude Code
+# adoption jumped 32%→84% across ~5,000 engineers. Budget accordingly.
+# Rule: alert when run_cost > session_budget * 0.8
 ```
 
 ---
