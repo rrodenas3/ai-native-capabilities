@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 import sys
@@ -42,5 +43,43 @@ def _load(relative: str, name: str):
     return module
 
 
+def _build_report(pack: dict) -> dict:
+    """Wrap MRP in canonical report envelope."""
+    decision = pack.get("decision", "UNKNOWN")
+    security = pack.get("security_clearance", {})
+    score = pack.get("briefing_score", 0.0)
+    return {
+        "cap": "cap-02",
+        "status": "pass" if decision == "APPROVE" else "fail",
+        "score": score if isinstance(score, float) else 0.0,
+        "metrics": {
+            "briefing_score": score if isinstance(score, float) else 0.0,
+            "security_cleared": 1.0 if security.get("cleared", False) else 0.0,
+        },
+        "blocking_failures": [] if decision == "APPROVE" else ["merge_blocked"],
+        "merge_readiness_pack": pack,
+    }
+
+
 if __name__ == "__main__":
-    print(json.dumps(run_demo(), indent=2))
+    parser = argparse.ArgumentParser(description="Cap-02 SASE merge readiness demo")
+    parser.add_argument(
+        "--output",
+        metavar="FILE",
+        help="Write JSON report to FILE in the standard report envelope format",
+    )
+    args = parser.parse_args()
+
+    pack = run_demo()
+
+    if args.output:
+        output_path = Path(args.output)
+        try:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            report = _build_report(pack)
+            output_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        except OSError as exc:
+            print(f"ERROR: could not write output to {args.output}: {exc}", file=sys.stderr)
+            sys.exit(1)
+
+    print(json.dumps(pack, indent=2))

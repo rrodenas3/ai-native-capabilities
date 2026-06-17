@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -17,8 +18,10 @@ ExpertReviewGate = load_attr("cap05_demo_gate", "agents/expert_gate.py", "Expert
 answer_query = load_attr("cap05_demo_query", "agents/query_agent.py", "answer_query")
 load_articles = load_attr("cap05_demo_eval", "evals/suite.py", "load_articles")
 
+_DEFAULT_QUERY = "What are the Annex III high-risk AI system obligations?"
 
-def run_demo(query: str = "What are Article 13 obligations?") -> dict:
+
+def run_demo(query: str = _DEFAULT_QUERY) -> dict:
     articles = load_articles(limit=15)
     extracted = extract_from_articles(articles)
     gate = ExpertReviewGate()
@@ -30,5 +33,48 @@ def run_demo(query: str = "What are Article 13 obligations?") -> dict:
     return {"query": query, "answers": answers[:5], "audit_events": len(gate.audit_trail.events)}
 
 
+def _build_report(result: dict) -> dict:
+    """Wrap demo result in the canonical report envelope."""
+    answers = result.get("answers", [])
+    citation_rate = sum(1 for a in answers if a.get("citations")) / len(answers) if answers else 0.0
+    return {
+        "cap": "cap-05",
+        "status": "pass",
+        "score": citation_rate,
+        "metrics": {
+            "query_answer_citation_rate": citation_rate,
+            "audit_events": result.get("audit_events", 0),
+        },
+        "blocking_failures": [],
+        "query": result.get("query", ""),
+        "answers": answers,
+    }
+
+
 if __name__ == "__main__":
-    print(json.dumps(run_demo(), indent=2))
+    parser = argparse.ArgumentParser(description="Cap-05 compliance obligation demo")
+    parser.add_argument(
+        "--query",
+        default=_DEFAULT_QUERY,
+        help="Compliance question to answer (default: Annex III high-risk AI obligations)",
+    )
+    parser.add_argument(
+        "--output",
+        metavar="FILE",
+        help="Write JSON report to FILE in the standard report envelope format",
+    )
+    args = parser.parse_args()
+
+    result = run_demo(query=args.query)
+
+    if args.output:
+        output_path = Path(args.output)
+        try:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            report = _build_report(result)
+            output_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        except OSError as exc:
+            print(f"ERROR: could not write output to {args.output}: {exc}", file=sys.stderr)
+            sys.exit(1)
+
+    print(json.dumps(result, indent=2))
