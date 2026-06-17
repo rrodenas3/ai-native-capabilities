@@ -61,7 +61,7 @@ def _contradiction_sentence(index: int, pair_id: int | None) -> str:
     if pair_id is None:
         return ""
     left, right = CONTRADICTIONS[pair_id]
-    return left if index % 2 else right
+    return left if index % 2 == 1 else right
 
 
 def _body(index: int, domain_title: str, themes: list[str], contradiction: str) -> str:

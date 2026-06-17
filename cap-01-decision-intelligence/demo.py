@@ -55,7 +55,7 @@ class DemoCorpusRetriever:
                 RetrievalResult(
                     chunk=DocumentChunk(
                         capability=CapabilityID.DECISION_INTELLIGENCE,
-                        doc_id=metadata["doc_id"],
+                        doc_id=metadata.get("doc_id", metadata.get("title", "demo-document")),
                         chunk_index=0,
                         content=_body_excerpt(content),
                         metadata=metadata,
@@ -139,7 +139,8 @@ def format_brief(output: dict) -> Panel:
     table.add_row("Human gate", str(output.get("human_gate_status", "pending")))
     findings = getattr(brief, "key_findings", output.get("key_findings", [])) or []
     for index, finding in enumerate(findings[:3], start=1):
-        citation = finding.citations[0] if getattr(finding, "citations", None) else None
+        citations = getattr(finding, "citations", None) or []
+        citation = citations[0] if len(citations) > 0 else None
         source = f" [{citation.source_title}]" if citation is not None else ""
         table.add_row(f"Finding {index}", f"{finding.claim}{source}")
     return Panel(table, title="Cap-01 Board-Ready Brief", expand=False)
