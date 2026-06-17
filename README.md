@@ -70,6 +70,11 @@ Six agents in sequence. Every factual claim checked against its source by the Ve
 
 **Blocking evals:** `citation_accuracy ≥ 0.95` · `hallucination_rate ≤ 0.02` · [`SPEC →`](./cap-01-decision-intelligence/specs/SPEC.md)
 
+> ✅ **MVP complete.** 6 agents built, tested, and merged. Demo running. 100-doc seed corpus. Run it:
+> ```bash
+> python cap-01-decision-intelligence/demo.py
+> ```
+
 ---
 
 ## Cap-02 — Agentic Engineering (SASE)
@@ -326,8 +331,9 @@ Stuck? Raise a [Consultation Request](/.github/ISSUE_TEMPLATE/crp.md). Never gue
 - [x] Frontier research integration — harness engineering, SSGM, protocols, evals
 - [x] ADR-002 (harness engineering) + ADR-003 (protocol layering) — documented
 - [x] core/harness/ scaffolded — canonical loop, SSGM memory, golden principles
-- [ ] Core infrastructure complete (issues #4–#12 + new #13–#18)
-- [ ] Cap-01 Decision Intelligence MVP (+ adaptive RAG, temporal RAG, A-MEM)
+- [x] Core: settings (#10), DB (#11), health check (#12), episodic memory (#4) — merged
+- [ ] Core infrastructure remaining (issues #5–#9 + new harness #13–#18)
+- [x] Cap-01 Decision Intelligence MVP — all 15 tasks merged, demo.py live, 100-doc corpus
 - [ ] Cap-02 Agentic Engineering MVP (+ private-codebase evals, SKILL.md library)
 - [ ] Cap-03 Agentic Commerce MVP (+ A2A cards, ACP/UCP, AP2 mandates)
 - [ ] Cap-04 Autonomous Operations MVP (+ self-healing loop, SSGM, Heartbeat)
