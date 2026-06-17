@@ -78,7 +78,7 @@ def scan_files(paths: list[str | Path], *, timeout_s: int = 30) -> SecurityScanR
 def security_gate_node(state: dict[str, Any]) -> dict[str, Any]:
     output_files = state.get("output_files", {})
     temp_root = Path(state.get("security_scan_root", ".cap02-security-scan"))
-    temp_root.mkdir(exist_ok=True)
+    temp_root.mkdir(parents=True, exist_ok=True)
     paths = []
     for relative, content in output_files.items():
         path = temp_root / relative
