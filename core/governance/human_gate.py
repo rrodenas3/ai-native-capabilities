@@ -76,13 +76,14 @@ class HumanApprovalGate:
             action="human_approval",
             payload=decision,
             decision=status.value,
-            approved_by=decision.get("approved_by"),
+            approved_by=decision.get("approved_by") or decision.get("approver_id"),
         )
         audit_trail = list(state.get("audit_trail", []))
         audit_trail.append(audit_event)
         return {
             "human_approved": approved,
             "human_gate_status": status.value,
+            "human_gate_payload": decision,
             "audit_trail": audit_trail,
         }
 
