@@ -48,6 +48,8 @@ pgvector>=0.3.0
 psycopg[binary]>=3.2.0
 pgvectorscale>=0.4.0
 rank-bm25>=0.2.2            # lexical search leg of hybrid retrieval
+python-docx>=1.1.2          # DOCX parsing for Cap-01 ingestion
+pypdf>=5.0.0                # PDF parsing for Cap-01 ingestion
 
 # ── Memory ─────────────────────────────────────────────────────────────────────
 redis>=5.2.0                # procedural memory (learned patterns, routing rules)
