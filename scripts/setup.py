@@ -48,7 +48,7 @@ def main() -> None:
     section("4 / 5  Database setup")
     db_url = os.getenv(
         "DATABASE_URL",
-        "postgresql://postgres:postgres@localhost:5432/ai_native"
+        "postgresql://localhost:5432/ai_native"
         + ("_test" if test_mode else ""),
     )
     print(f"  Database: {db_url.split('@')[1] if '@' in db_url else db_url}")

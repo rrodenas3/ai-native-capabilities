@@ -7,6 +7,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from threading import Lock
 
+from core.utils.settings import get_settings
+
 MODEL_PRICING = {
     "claude-opus-4-8": {"input": 15.00, "output": 75.00},
     "claude-sonnet-4-6": {"input": 3.00, "output": 15.00},
@@ -45,7 +47,11 @@ class CostTelemetry:
         self._lock = Lock()
         self._alerted_runs: set[str] = set()
         self.budget_alert_handler = budget_alert_handler
-        self.session_budget_usd = session_budget_usd or float(os.getenv("SESSION_BUDGET_USD", "5.00"))
+        self.session_budget_usd = (
+            session_budget_usd
+            if session_budget_usd is not None
+            else _session_budget_from_settings_or_env()
+        )
 
     def record_llm_call(
         self,
@@ -98,3 +104,8 @@ class CostTelemetry:
             self._alerted_runs.add(run_id)
             self.budget_alert_handler(run_id, cost, threshold_usd)
 
+def _session_budget_from_settings_or_env() -> float:
+    try:
+        return get_settings().SESSION_BUDGET_USD
+    except ValueError:
+        return float(os.getenv("SESSION_BUDGET_USD", "5.00"))
