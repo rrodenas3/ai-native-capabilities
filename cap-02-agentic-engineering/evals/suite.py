@@ -43,7 +43,8 @@ def run_eval() -> dict[str, Any]:
 
     generated_lines = _generated_lines(state.get("output_files", {}))
     findings = pack.security_scan.critical + pack.security_scan.high + pack.security_scan.medium + pack.security_scan.low
-    weakness_rate = round(findings / max(generated_lines / 1000, 0.001), 4)
+    # Floor at 1 KLOC so tiny generated stubs are not penalized disproportionately.
+    weakness_rate = round(findings / max(generated_lines / 1000, 1.0), 4)
     pass_count = sum(1 for score in pack.criteria_scores if str(score.status) == "PASS" or getattr(score.status, "value", "") == "PASS")
 
     metrics = {

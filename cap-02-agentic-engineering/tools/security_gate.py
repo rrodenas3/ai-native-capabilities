@@ -7,6 +7,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -40,11 +41,37 @@ class SecurityScanResult(BaseModel):
 def _require_ci_scanners() -> None:
     if os.environ.get("REQUIRE_SECURITY_SCANNERS") != "1":
         return
-    missing = [tool for tool in ("bandit", "semgrep") if shutil.which(tool) is None]
+    missing = []
+    if shutil.which("bandit") is None:
+        missing.append("bandit")
+    if not _semgrep_available():
+        missing.append("semgrep")
     if missing:
         raise RuntimeError(
             f"Security scanners required (REQUIRE_SECURITY_SCANNERS=1): {', '.join(missing)}"
         )
+
+
+def _semgrep_available() -> bool:
+    if shutil.which("semgrep"):
+        return True
+    try:
+        completed = subprocess.run(
+            [sys.executable, "-m", "semgrep", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return completed.returncode == 0
+
+
+def _semgrep_command() -> list[str]:
+    if shutil.which("semgrep"):
+        return ["semgrep"]
+    return [sys.executable, "-m", "semgrep"]
 
 
 def scan_files(paths: list[str | Path], *, timeout_s: int = 30) -> SecurityScanResult:
@@ -120,11 +147,11 @@ def _bandit_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFindi
 
 
 def _semgrep_findings(files: list[Path], *, timeout_s: int) -> list[SecurityFinding]:
-    if shutil.which("semgrep") is None or not files:
+    if not _semgrep_available() or not files:
         return []
     try:
         completed = subprocess.run(
-            ["semgrep", "--config", "auto", "--json", *[str(path) for path in files]],
+            [*_semgrep_command(), "--config", "auto", "--json", *[str(path) for path in files]],
             capture_output=True,
             text=True,
             timeout=timeout_s,
