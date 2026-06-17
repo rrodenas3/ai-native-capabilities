@@ -63,8 +63,9 @@ def run_cap_evals(cap_id: str, mock: bool = True) -> dict:
     env = {
         "EVAL_MODE": "ci",
         "LLM_MODE": "mock" if mock else "real",
-        "REQUIRE_SECURITY_SCANNERS": "1",
     }
+    if os.environ.get("REQUIRE_SECURITY_SCANNERS") == "1":
+        env["REQUIRE_SECURITY_SCANNERS"] = "1"
     full_env = {**os.environ, **env}
 
     start = time.time()

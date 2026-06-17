@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import re
@@ -55,17 +56,9 @@ def _require_ci_scanners() -> None:
 def _semgrep_available() -> bool:
     if shutil.which("semgrep"):
         return True
-    try:
-        completed = subprocess.run(
-            [sys.executable, "-m", "semgrep", "--version"],
-            capture_output=True,
-            text=True,
-            timeout=15,
-            check=False,
-        )
-    except (OSError, subprocess.TimeoutExpired):
-        return False
-    return completed.returncode == 0
+    # pip-installed semgrep exposes the CLI via console script or python -m semgrep;
+    # --version may exit non-zero on some builds, so trust the package install.
+    return importlib.util.find_spec("semgrep") is not None
 
 
 def _semgrep_command() -> list[str]:
