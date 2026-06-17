@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -19,6 +20,8 @@ mape = load_attr("cap04_forecast", "agents/forecast_agent.py", "mape")
 detect_exceptions = load_attr("cap04_exception", "agents/exception_agent.py", "detect_exceptions")
 simulate_po_impact = load_attr("cap04_digital_twin", "tools/digital_twin.py", "simulate_po_impact")
 GovernedPOStore = load_attr("cap04_governed_po_eval", "tools/governed_po_store.py", "GovernedPOStore")
+build_graph = load_attr("cap04_graph_eval", "agents/supply_chain_graph.py", "build_graph")
+initial_state = load_attr("cap04_graph_eval", "agents/supply_chain_graph.py", "initial_state")
 
 
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "data"
@@ -48,12 +51,13 @@ def run_eval() -> dict:
     exception_recall = len(expected_keys & detected_keys) / len(expected_keys)
 
     ssgm_quarantine_coverage = _eval_ssgm_governance()
+    human_approval_coverage = _eval_human_approval_coverage()
 
     metrics = {
         "forecast_accuracy_mape": round(forecast_mape, 4),
         "stockout_reduction_rate": 0.42,
         "inventory_turnover_improvement": 0.12,
-        "human_approval_coverage": 1.0,
+        "human_approval_coverage": round(human_approval_coverage, 4),
         "autonomous_action_accuracy": 0.96,
         "exception_detection_recall": round(exception_recall, 4),
         "digital_twin_validation": 1.0 if simulate_po_impact({"po_id": "PO", "sku": "SKU", "quantity": 100, "unit_cost": 10, "value_usd": 1000}, {"daily_forecast": 10}, {"current_stock": 10, "stockout_probability": 0.8})["simulated"] else 0.0,
@@ -112,6 +116,46 @@ def _eval_ssgm_governance() -> float:
 
     poisoned_was_quarantined = store.quarantine_count > clean_quarantine
     return 1.0 if poisoned_was_quarantined else 0.0
+
+
+def _eval_human_approval_coverage() -> float:
+    """
+    Exercise the LangGraph interrupt/resume path for above-threshold POs.
+    Returns 1.0 when approval gate pauses and approved resume reaches ERP write.
+    """
+    from langgraph.checkpoint.memory import MemorySaver
+    from langgraph.types import Command
+
+    from core.utils.settings import get_settings
+
+    os.environ["LLM_MODE"] = "mock"
+    os.environ["AUTONOMOUS_ACTION_THRESHOLD_USD"] = "100"
+    get_settings.cache_clear()
+
+    sales = _read_csv(FIXTURE_DIR / "sales_history.csv")
+    stock = _read_csv(FIXTURE_DIR / "stock_levels.csv")
+    suppliers = _read_csv(FIXTURE_DIR / "supplier_catalog.csv")
+
+    graph = build_graph(checkpointer=MemorySaver())
+    config = {"configurable": {"thread_id": "cap04-eval-human-approval"}}
+    state = initial_state(
+        run_id="cap04-eval-human-approval",
+        sales_history=sales[:90],
+        stock_levels=stock[:1],
+        supplier_catalog=suppliers[:1],
+    )
+    paused = graph.invoke(state, config=config)
+    if "__interrupt__" not in paused:
+        return 0.0
+    resumed = graph.invoke(
+        Command(resume={"status": "approved", "approver_id": "eval-runner"}),
+        config=config,
+    )
+    if resumed.get("human_approval_status") != "approved":
+        return 0.0
+    if not resumed.get("erp_writes"):
+        return 0.0
+    return 1.0
 
 
 def main() -> None:

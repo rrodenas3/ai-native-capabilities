@@ -71,11 +71,11 @@ Open a GitHub issue with label `crp` and include the CRP comment.
 
 ## Eval gates
 
-Every PR runs the eval suite automatically. Blocking metrics will fail the PR:
+Every PR runs the eval suite automatically via `.github/workflows/evals.yml`. Blocking metrics will fail the PR:
 
 | Capability | Blocking metrics |
 |---|---|
-| Core | All core tests must pass |
+| Core | All core tests must pass + golden principles |
 | Cap-01 | citation_accuracy, hallucination_rate |
 | Cap-02 | briefing_completeness, security_weakness_rate |
 | Cap-03 | agent_sprawl_count, escalation_accuracy |
@@ -83,6 +83,16 @@ Every PR runs the eval suite automatically. Blocking metrics will fail the PR:
 | Cap-05 | false_negative_rate_obligations, citation_accuracy, expert_review_coverage, query_answer_citation_rate |
 
 A PR that fails a blocking metric **cannot be merged**, regardless of other metrics.
+
+**Before opening a PR** (matches CI):
+
+```bash
+pytest
+python scripts/run_evals.py --all --mock
+python scripts/check_golden_principles.py
+```
+
+Gate thresholds: `core/evals/gate_config.py`.
 
 ---
 
