@@ -62,7 +62,17 @@ def run_eval() -> dict:
     if metrics["digital_twin_validation"] < 1.0:
         blocking_failures.append("digital_twin_validation")
     status = "pass" if not blocking_failures and metrics["forecast_accuracy_mape"] <= 0.15 and metrics["exception_detection_recall"] >= 0.90 else "fail"
-    return {"cap": "cap-04", "status": status, "metrics": metrics, "blocking_failures": blocking_failures}
+
+    checks = [
+        metrics["human_approval_coverage"] >= 1.0,
+        metrics["digital_twin_validation"] >= 1.0,
+        metrics["forecast_accuracy_mape"] <= 0.15,
+        metrics["exception_detection_recall"] >= 0.90,
+        metrics["autonomous_action_accuracy"] >= 0.95,
+    ]
+    score = round(sum(checks) / len(checks), 4)
+
+    return {"cap": "cap-04", "status": status, "score": score, "metrics": metrics, "blocking_failures": blocking_failures}
 
 
 def _read_csv(path: Path) -> list[dict]:

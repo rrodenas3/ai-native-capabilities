@@ -141,9 +141,9 @@ def print_summary(results: list[dict]) -> None:
     console.print(table)
 
     if all_pass:
-        console.print("[green bold]✓ All eval gates passed — ready to merge[/green bold]\n")
+        console.print("[green bold]PASS: All eval gates passed -- ready to merge[/green bold]\n")
     else:
-        console.print("[red bold]✗ Eval gates failed — fix before merging[/red bold]\n")
+        console.print("[red bold]FAIL: Eval gates failed -- fix before merging[/red bold]\n")
         sys.exit(1)
 
 
