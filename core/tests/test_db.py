@@ -131,7 +131,7 @@ def test_get_connection_uses_database_url(monkeypatch) -> None:
 
 def test_get_pool_returns_async_pool(monkeypatch) -> None:
     monkeypatch.setenv("LLM_MODE", "mock")
-    pool = get_pool("postgresql://postgres:postgres@localhost:5432/ai_native_test")
+    pool = get_pool(os.getenv("TEST_DATABASE_URL", "postgresql://localhost:5432/ai_native_test"))
 
     assert isinstance(pool, AsyncConnectionPool)
 
