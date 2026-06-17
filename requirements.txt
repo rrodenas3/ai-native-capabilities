@@ -61,7 +61,7 @@ langsmith>=0.2.0            # deepest LangGraph integration; LangGraph Studio re
 
 # ── Security (mandatory — Cap-02 blocks on failures) ───────────────────────────
 bandit>=1.8.0               # Python security linter
-semgrep>=1.90.0             # pattern-based security scanning
+# semgrep>=1.90.0           # in [ci] and [dev] extras only — pip install -e ".[ci]"
 
 # ── HTTP & utils ───────────────────────────────────────────────────────────────
 httpx>=0.28.0

@@ -110,7 +110,7 @@ If you add a reference to a spec, include the evidence grade.
 
 ## Code standards
 
-- Python 3.12+
+- Python 3.13+
 - Type hints on all functions
 - Pydantic models for all data structures
 - No hardcoded model names — use `settings.py`

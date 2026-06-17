@@ -12,6 +12,7 @@
 [![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-1.29-854F0B?style=flat-square)](https://opentelemetry.io)
 [![49 open issues](https://img.shields.io/badge/build_queue-49_issues-444441?style=flat-square)](https://github.com/rrodenas3/ai-native-capabilities/issues)
 [![MIT License](https://img.shields.io/badge/License-MIT-A32D2D?style=flat-square)](./LICENSE)
+[![Evals](https://github.com/rrodenas3/ai-native-capabilities/actions/workflows/evals.yml/badge.svg)](https://github.com/rrodenas3/ai-native-capabilities/actions/workflows/evals.yml)
 
 <br/>
 
@@ -160,6 +161,22 @@ Harvey AI reached $11B valuation and $190M ARR in this market. EU AI Act high-ri
 | Gap | Gap Mapping Agent | Use-case inventory vs confirmed obligations |
 
 **Blocking evals:** `false_negative_rate ≤ 0.01` · `citation_accuracy ≥ 0.98` · `expert_review_coverage = 1.00` · `query_answer_citation_rate = 1.00` · [`SPEC →`](./cap-05-compliance-intelligence/specs/SPEC.md)
+
+---
+
+## Eval results
+
+> All 5 capabilities passing as of June 2026. Run locally: `python scripts/run_evals.py --all --mock`
+
+| Capability | Score | Status | Key blocking metrics |
+|---|:---:|:---:|---|
+| Cap-01 · Decision Intelligence | **1.00** | ✅ pass | `citation_accuracy ≥ 0.95` · `hallucination_rate ≤ 0.02` |
+| Cap-02 · Agentic Engineering | **0.98** | ✅ pass | `briefing_completeness = 1.0` · `security_weakness_rate ≤ 5.0/1k` |
+| Cap-03 · Agentic Commerce | **1.00** | ✅ pass | `agent_sprawl_count ≤ 2` · `escalation_accuracy ≥ 0.90` |
+| Cap-04 · Autonomous Operations | **1.00** | ✅ pass | `human_approval_coverage = 1.00` · `digital_twin_validation = 1.00` |
+| Cap-05 · Compliance Intelligence | **0.99** | ✅ pass | `false_negative_rate ≤ 0.01` · `expert_review_coverage = 1.00` |
+
+Scores are computed in mock mode (no API cost). CI runs these gates on every PR and blocks merge on failure. View live reports: `local-dashboard` (FastAPI at `:8000`).
 
 ---
 
@@ -341,13 +358,15 @@ Stuck? Raise a [Consultation Request](/.github/ISSUE_TEMPLATE/crp.md). Never gue
 - [x] core/harness/ scaffolded — canonical loop, SSGM memory, golden principles
 - [x] Core: settings (#10), DB (#11), health check (#12), episodic memory (#4) — merged
 - [ ] Core infrastructure remaining (issues #5–#9 + new harness #13–#18)
-- [x] Cap-01 Decision Intelligence MVP — all 15 tasks merged, demo.py live, 100-doc corpus
-- [ ] Cap-02 Agentic Engineering MVP (+ private-codebase evals, SKILL.md library)
-- [ ] Cap-03 Agentic Commerce MVP (+ A2A cards, ACP/UCP, AP2 mandates)
-- [ ] Cap-04 Autonomous Operations MVP (+ self-healing loop, SSGM, Heartbeat)
-- [ ] Cap-05 Compliance Intelligence MVP (+ GraphRAG, multi-judge, LAB benchmark)
+- [x] Cap-01 Decision Intelligence — 6 agents, demo.py, 100-doc corpus, eval score **1.00**
+- [x] Cap-02 Agentic Engineering — ACE CLI, security gate, SASE pipeline, eval score **0.98** · remaining: SKILL.md library, private-codebase evals
+- [x] Cap-03 Agentic Commerce — Sparky super-agent, full commerce mesh, eval score **1.00** · remaining: A2A cards, ACP/UCP, AP2 mandates
+- [x] Cap-04 Autonomous Operations — LangGraph pipeline, SSGM governance (GovernedPOStore), eval score **1.00** · remaining: self-healing loop, Heartbeat
+- [x] Cap-05 Compliance Intelligence — KG agent, SSGM governance (GovernedKnowledgeGraph), eval score **0.99** · remaining: GraphRAG, multi-judge, LAB benchmark
+- [x] SSGM memory governance — wired into Cap-04 + Cap-05; A-MemGuard poisoning defense active
+- [x] Eval dashboard — FastAPI, live eval + demo runs, score badges, SSGM quarantine indicators
 - [ ] Benchmark dashboard — all 5 capabilities side-by-side (CLEAR framework)
-- [ ] Interactive web demos per capability
+- [ ] Interactive web demos per capability (input surface: real queries in, agent output out)
 
 ---
 
